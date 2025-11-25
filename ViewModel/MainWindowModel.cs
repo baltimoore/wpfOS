@@ -86,7 +86,7 @@ namespace wpfOs.ViewModel
         public MainWindowModel()
         {
             // Navigation registration
-            SplashVM = new SplashScreenModel(this);
+            SplashVM = new SplashScreenModel();
             SetSplashScreenViewModel = new RelayCommand(_ => this.NavigateToSplashScreen());
 
             LoginVM = new LoginFormModel();
