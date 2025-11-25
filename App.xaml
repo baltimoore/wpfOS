@@ -1,0 +1,19 @@
+﻿<Application x:Class="wpfOs.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:wpfOs"
+             xmlns:v="clr-namespace:wpfOs.View"
+             xmlns:vm="clr-namespace:wpfOs.ViewModel"
+             StartupUri="View/MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:SplashScreenModel}">
+            <v:SplashScreen/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LoginFormModel}">
+            <v:LoginForm/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DesktopViewModel}">
+            <v:Desktop/>
+        </DataTemplate>
+    </Application.Resources>
+</Application>
