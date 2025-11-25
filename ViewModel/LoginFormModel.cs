@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+using System.Security;
 using System.Windows;
 
 namespace wpfOs.ViewModel
@@ -9,6 +9,10 @@ namespace wpfOs.ViewModel
     {
         // Storing Application properties from MainWindow
         public MainWindowModel MainVM { get; }
+
+        // Authentification event
+        public event EventHandler AuthenticateUserSuccess;
+
 
         /******************************************
          ***********                    ***********
@@ -27,19 +31,17 @@ namespace wpfOs.ViewModel
             }
         }
 
-        private string _password;
-        public string Password
+        private SecureString _password;
+        public SecureString Password
         {
             get { return _password; }
-            set
-            {
-                _password = value; OnPropertyChanged(nameof(Password));
-            }
+            set { _password = value;}
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
 
         /******************************************
          ***********                    ***********
@@ -72,12 +74,14 @@ namespace wpfOs.ViewModel
         {
             List<string> msg = new();
 
-            if (this.Username == null)
+            if (this.Username == null ||
+                this.Username.Length == 0)
             {
                 msg.Add("Ievadiet lietotājvārdu!");
             }
 
-            if (this.Password == null)
+            if (this.Password == null ||
+                this.Password.Length == 0)
             {
                 msg.Add("Ievadiet paroli!");
             }
@@ -85,7 +89,7 @@ namespace wpfOs.ViewModel
             return msg;
         }
 
-        private bool AuthenticateUser()
+        private void AuthenticateUser()
         {
             // first, check if all data is submitted
             List<string> validationMessage = ValidateForm();
@@ -95,15 +99,17 @@ namespace wpfOs.ViewModel
                 string msg = ("• " + string.Join("\n• ", validationMessage));
                 MessageBox.Show(
                     messageBoxText: msg,
-                    caption: "Warning",
+                    caption: "Input error",
                     icon: MessageBoxImage.Exclamation,
                     button: MessageBoxButton.OK
                 );
-                return false;
+                return;
             }
 
             // TODO: Do a check against a user file
-            return true;
+
+            AuthenticateUserSuccess?.Invoke(null, EventArgs.Empty);
+            return;
         }
     }
 }

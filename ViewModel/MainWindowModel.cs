@@ -85,6 +85,7 @@ namespace wpfOs.ViewModel
 
         public MainWindowModel()
         {
+            // Navigation registration
             SplashVM = new SplashScreenModel(this);
             SetSplashScreenViewModel = new RelayCommand(_ => this.NavigateToSplashScreen());
 
@@ -94,8 +95,16 @@ namespace wpfOs.ViewModel
             DesktopVM = new DesktopViewModel(this);
             SetDesktopViewModel = new RelayCommand(_ => this.NavigateToDesktop());
 
+            // Event registration
+            LoginVM.AuthenticateUserSuccess += LoginVM_AuthenticateUserSuccess;
+
             // Initialize the app startup
             this.BootupSequence();
+        }
+
+        private void LoginVM_AuthenticateUserSuccess(object? sender, EventArgs e)
+        {
+            this.NavigateToDesktop();
         }
 
         private void BootupSequence()

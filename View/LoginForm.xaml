@@ -17,7 +17,7 @@
                 FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
                 Text="Parole"/>
         <PasswordBox FontSize="16" Width="350" HorizontalAlignment="Center"
-                     Password="{Binding Password}"/>
+                     PasswordChanged="OnPasswordChanged"/>
         <Button Margin="0,20,0,0"
                 FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Padding="10"
                 Content="Autentificēties" Command="{Binding UserAuthenticateCommand}" />
