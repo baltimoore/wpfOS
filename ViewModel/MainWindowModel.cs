@@ -89,7 +89,7 @@ namespace wpfOs.ViewModel
             SplashVM = new SplashScreenModel(this);
             SetSplashScreenViewModel = new RelayCommand(_ => this.NavigateToSplashScreen());
 
-            LoginVM = new LoginFormModel(this);
+            LoginVM = new LoginFormModel();
             SetLoginFormViewModel = new RelayCommand(_ => this.NavigateToLoginForm());
 
             DesktopVM = new DesktopViewModel(this);

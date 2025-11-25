@@ -7,9 +7,6 @@ namespace wpfOs.ViewModel
 {
     public class LoginFormModel
     {
-        // Storing Application properties from MainWindow
-        public MainWindowModel MainVM { get; }
-
         // Authentification event
         public event EventHandler AuthenticateUserSuccess;
 
@@ -52,12 +49,10 @@ namespace wpfOs.ViewModel
 
 
 
-        public LoginFormModel(MainWindowModel main)
+        public LoginFormModel()
         {
-            this.MainVM = main;
-
             // Relay commands
-            UserAuthenticateCommand = new RelayCommand(_ => this.AuthenticateUser());
+            UserAuthenticateCommand = new RelayCommand(_ => this.TryAuthenticateUser());
         }
 
 
@@ -70,12 +65,11 @@ namespace wpfOs.ViewModel
          ******************************************/
         public RelayCommand UserAuthenticateCommand { get; }
 
-        private List<string> ValidateForm()
+        private List<string> ValidateLoginForm()
         {
             List<string> msg = new();
 
-            if (this.Username == null ||
-                this.Username.Length == 0)
+            if (string.IsNullOrEmpty(Username))
             {
                 msg.Add("Ievadiet lietotājvārdu!");
             }
@@ -89,27 +83,45 @@ namespace wpfOs.ViewModel
             return msg;
         }
 
-        private void AuthenticateUser()
+        private bool DisplayErrorsIfAny(List<string> errors)
+        {
+            if (errors.Count == 0) return false;
+
+            // first newline needed, because join only adds *between* elements
+            string msg = ("• " + string.Join("\n• ", errors));
+            MessageBox.Show(
+                messageBoxText: msg,
+                caption: "Input error",
+                icon: MessageBoxImage.Exclamation,
+                button: MessageBoxButton.OK
+            );
+            return true;
+            
+        }
+
+        private void TryAuthenticateUser()
         {
             // first, check if all data is submitted
-            List<string> validationMessage = ValidateForm();
-            if (validationMessage.Count > 0)
-            {
-                // first newline needed, because join only adds *between* elements
-                string msg = ("• " + string.Join("\n• ", validationMessage));
-                MessageBox.Show(
-                    messageBoxText: msg,
-                    caption: "Input error",
-                    icon: MessageBoxImage.Exclamation,
-                    button: MessageBoxButton.OK
-                );
-                return;
-            }
+            List<string> errorList = ValidateLoginForm();
 
             // TODO: Do a check against a user file
 
-            AuthenticateUserSuccess?.Invoke(null, EventArgs.Empty);
+            // If we have any errors so far, display them and fail this function
+            if (this.DisplayErrorsIfAny(errorList)) return;
+
+            // No errors? Announce the success
+            AuthenticateUserSuccess?.Invoke(null, new AuthenticateUserEventArgs { AuthenticatedUser = this.Username });
             return;
         }
     }
+}
+
+
+
+/// <summary>
+/// A custom EventArg class, that stores the authenticated user's username as a custom property
+/// </summary>
+internal class AuthenticateUserEventArgs : EventArgs
+{
+    public string AuthenticatedUser { get; set; }
 }
