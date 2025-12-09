@@ -12,17 +12,37 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="UrlBox" Text="{Binding BrowserUrl, Mode=TwoWay}" 
-                Grid.Row="0" Grid.Column="0" Margin="0,0,6,0"/>
-        <Button Content="Go" Command="{Binding ChangeWebpageCommand}"
-                Grid.Row="0" Grid.Column="1" Width="30"/>
+            <Button Command="{Binding GoHistoryBackCommand}"
+                    Grid.Column="0" Width="30" Height="20" >
+                <TextBlock Text="⇦" FontSize="32" VerticalAlignment="Center" FontWeight="Bold" Margin="0,-8,0,0"/>
+            </Button>
+            <Button Command="{Binding GoHistoryForwardCommand}"
+                    Grid.Column="1" Width="30" Height="20" >
+                <TextBlock Text="⇨" FontSize="32" VerticalAlignment="Center" FontWeight="Bold" Margin="0,-8,0,0"/>
+            </Button>
+            <Button Command="{Binding GoHomepageCommand}"
+                    Grid.Column="2" Width="30" Height="20" Margin="6,0,0,0">
+                <TextBlock Text="⌂" FontSize="20" VerticalAlignment="Center"/>
+            </Button>
+            
+            <TextBox x:Name="UrlBox" Text="{Binding BrowserUrl}" 
+                    Grid.Column="3" Margin="6,0,6,0"/>
+            
+            <Button Content="Go" Command="{Binding ChangeWebpageCommand}"
+                    Grid.Column="4" Width="50"/>
+        </Grid>
 
-        <wv2:WebView2 Name="webView" Source="https://www.microsoft.com"
-                      Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,0"/>
+        <wv2:WebView2 Name="webView" Source="{Binding BrowserUrl}"
+                      Grid.Row="1" Margin="0,6,0,0"/>
     </Grid>
 </UserControl>

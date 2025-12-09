@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpfOs"
+        xmlns:v="clr-namespace:wpfOs.View.Apps"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Visibility="{Binding GlobalOsMenuVisibility}">
             <MenuItem Header="Desktop"
                     Command="{Binding SetDesktopViewModel}"/>
 
@@ -37,7 +38,6 @@
                     Command="{Binding SetWebBrowserViewModel}"/>
 
         </Menu>
-        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <ContentControl DockPanel.Dock="Bottom" Content="{Binding CurrentViewModel}"/>
     </DockPanel>
-
 </Window>

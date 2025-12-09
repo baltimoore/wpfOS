@@ -2,14 +2,15 @@
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows;
+using wpfOs.Model;
 
 namespace wpfOs.ViewModel
 {
     public class LoginFormModel
     {
-        // Authentification event
-        public event EventHandler AuthenticateUserSuccess;
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /******************************************
          ***********                    ***********
@@ -17,6 +18,12 @@ namespace wpfOs.ViewModel
          ***********       START        ***********
          ****************         *****************
          ******************************************/
+
+        // Saving MainWindow ViewModel for app-wide data
+        public MainWindowModel MainVM { get; }
+
+        // Authentification event
+        public event EventHandler AuthenticateUserSuccess;
 
         private string _username;
         public string Username
@@ -35,10 +42,6 @@ namespace wpfOs.ViewModel
             set { _password = value;}
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
 
         /******************************************
          ***********                    ***********
@@ -49,8 +52,10 @@ namespace wpfOs.ViewModel
 
 
 
-        public LoginFormModel()
+        public LoginFormModel(MainWindowModel main)
         {
+            this.MainVM = main;
+
             // Relay commands
             UserAuthenticateCommand = new RelayCommand(_ => this.TryAuthenticateUser());
         }
@@ -104,13 +109,33 @@ namespace wpfOs.ViewModel
             // first, check if all data is submitted
             List<string> errorList = ValidateLoginForm();
 
-            // TODO: Do a check against a user file
-
             // If we have any errors so far, display them and fail this function
             if (this.DisplayErrorsIfAny(errorList)) return;
 
+            // Verify user credentials against AuthService
+            var answer = MainVM.AuthService.AuthenticateUser(Username, Password);
+            switch (answer)
+            {
+                case null:
+                    errorList.Add("Šāds lietotājs nav reģistrēts");
+                    break;
+                case false:
+                    errorList.Add("Parole nav ievadīta pareizi");
+                    break;
+                case User:
+                    // Lietotājs ir atrasts un autentificējies
+                    break;
+
+                default:
+                    errorList.Add("Sistēmas kļūme!");
+                    break;
+            }
+
+            // If we have any errors again, display them and fail this function
+            if (this.DisplayErrorsIfAny(errorList)) return;
+
             // No errors? Announce the success
-            AuthenticateUserSuccess?.Invoke(null, new AuthenticateUserEventArgs { AuthenticatedUser = this.Username });
+            AuthenticateUserSuccess?.Invoke(null, new AuthenticateUserEventArgs { AuthenticatedUser = answer });
             return;
         }
     }
@@ -123,5 +148,5 @@ namespace wpfOs.ViewModel
 /// </summary>
 internal class AuthenticateUserEventArgs : EventArgs
 {
-    public string AuthenticatedUser { get; set; }
+    public User AuthenticatedUser { get; set; }
 }

@@ -1,17 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security;
+using System.Windows;
+using wpfOs.Model;
+using wpfOs.Service;
 
 namespace wpfOs.ViewModel
 {
     public class MainWindowModel : INotifyPropertyChanged
     {
-        private object _currentViewModel;
-        public object CurrentViewModel
-        {
-            get { return this._currentViewModel; }
-            set { SetProperty(ref this._currentViewModel, value); }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -33,7 +30,28 @@ namespace wpfOs.ViewModel
          ****************         *****************
          ******************************************/
 
-        // Put global variables here
+        public AuthService AuthService;
+
+
+        private User _currentUser;
+        public User CurrentUser {
+            get { return _currentUser; }
+            set { SetProperty(ref this._currentUser, value); }
+        }
+
+        private Visibility _menuVisibility = Visibility.Collapsed;
+        public Visibility GlobalOsMenuVisibility
+        {
+            get { return _menuVisibility; }
+            set { SetProperty(ref this._menuVisibility, value); }
+        }
+
+        private object _currentViewModel;
+        public object CurrentViewModel
+        {
+            get { return this._currentViewModel; }
+            set { SetProperty(ref this._currentViewModel, value); }
+        }
 
         /******************************************
          *******                            *******
@@ -106,7 +124,7 @@ namespace wpfOs.ViewModel
             SplashVM = new SplashScreenModel();
             SetSplashScreenViewModel = new RelayCommand(_ => this.NavigateToSplashScreen());
 
-            LoginVM = new LoginFormModel();
+            LoginVM = new LoginFormModel(this);
             SetLoginFormViewModel = new RelayCommand(_ => this.NavigateToLoginForm());
 
             DesktopVM = new DesktopViewModel(this);
@@ -121,9 +139,15 @@ namespace wpfOs.ViewModel
             // Event registration
             LoginVM.AuthenticateUserSuccess += LoginVM_AuthenticateUserSuccess;
 
+            // Service registration
+            this.AuthService = new();
+            SecureString pass = new();
+            pass.AppendChar('A');
+            AuthService.CreateUser("a", pass);
+
             // Initialize the app startup
-            this.BootupSequence();
-            //this.NavigateToDesktop();
+            //this.BootupSequence();
+            this.LoginVM_AuthenticateUserSuccess(null, EventArgs.Empty);
         }
 
         private void BootupSequence()
@@ -135,6 +159,7 @@ namespace wpfOs.ViewModel
 
         private void LoginVM_AuthenticateUserSuccess(object? sender, EventArgs e)
         {
+            GlobalOsMenuVisibility = Visibility.Visible;
             NavigateToDesktop();
         }
     }

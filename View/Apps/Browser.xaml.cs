@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using wpfOs.ViewModel.Apps;
 
 namespace wpfOs.View.Apps
 {
