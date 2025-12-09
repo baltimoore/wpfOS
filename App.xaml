@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:wpfOs"
              xmlns:v="clr-namespace:wpfOs.View"
+             xmlns:va="clr-namespace:wpfOs.View.Apps"
              xmlns:vm="clr-namespace:wpfOs.ViewModel"
+             xmlns:vma="clr-namespace:wpfOs.ViewModel.Apps"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:SplashScreenModel}">
@@ -14,6 +16,13 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:DesktopViewModel}">
             <v:Desktop/>
+        </DataTemplate>
+        
+        <!--
+            OS application definitions
+          -->
+        <DataTemplate DataType="{x:Type vma:BrowserViewModel}">
+            <va:Browser/>
         </DataTemplate>
     </Application.Resources>
 </Application>

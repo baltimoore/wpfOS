@@ -10,7 +10,8 @@ namespace wpfOs
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel.MainWindowModel();
+            ViewModel.MainWindowModel _context = new ViewModel.MainWindowModel();
+            this.DataContext = _context;
         }
     }
 }

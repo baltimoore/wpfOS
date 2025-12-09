@@ -6,7 +6,38 @@
         xmlns:local="clr-namespace:wpfOs"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    
-    <ContentControl Content="{Binding CurrentViewModel}"/>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Desktop"
+                    Command="{Binding SetDesktopViewModel}"/>
+
+            <MenuItem Header="Izslēgt...">
+                <MenuItem Header="Izslēgt"
+                        Command=""/>
+                <MenuItem Header="Slēgt kontu"
+                        Command=""/>
+                <MenuItem Header="Mainīt lietotāju"
+                        Command=""/>
+            </MenuItem>
+
+            <MenuItem Header="Iestatījumi"
+                    Command=""/>
+
+            <MenuItem Header="Fails...">
+                <MenuItem Header="Jauns fails"
+                        Command="{Binding SetTextEditorViewModel}"/>
+                <MenuItem Header="Saglabāt"
+                        Command=""/>
+                <MenuItem Header="Aizvērt"
+                        Command=""/>
+            </MenuItem>
+
+            <MenuItem Header="Pārlūks"
+                    Command="{Binding SetWebBrowserViewModel}"/>
+
+        </Menu>
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+    </DockPanel>
 
 </Window>
