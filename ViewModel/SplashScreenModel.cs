@@ -1,6 +1,4 @@
-﻿
-
-namespace wpfOs.ViewModel
+﻿namespace wpfOs.ViewModel
 {
     public class SplashScreenModel
     {
