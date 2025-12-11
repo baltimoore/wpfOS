@@ -6,8 +6,67 @@
              xmlns:local="clr-namespace:wpfOs.View.Apps"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- PFP buttons -->
+        <DataTemplate x:Key="ButtonImageTemplate">
+            <Button Width="100" Height="100" Margin="8">
+                <Image Source="{Binding}"/>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+    
     <Grid>
-        <TextBlock FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Text="settings" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Margin="0,18"
+                       FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
+                       Text="Profila attēls" />
+            <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                <ItemsControl ItemTemplate="{StaticResource ButtonImageTemplate}"
+                              ItemsSource="{Binding UserPfpArray}" />
+            </WrapPanel>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical" VerticalAlignment="Top">
+                <TextBlock Margin="0,18"
+                           FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
+                           Text="Lietotājvārds"/>
+                <TextBox Margin="0,16,0,0"
+                         FontSize="16" Width="350" HorizontalAlignment="Center"
+                         Text="{Binding NewUsername}"/>
+                <Button Margin="0,20,0,0"
+                        FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Padding="10"
+                        Content="Mainīt lietotājvārdu" Command="{Binding ChangeUsername}" />
+            </StackPanel>
+
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Vertical" VerticalAlignment="Top">
+            <TextBlock Margin="0,18"
+                       FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
+                       Text="Parole"/>
+            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center" />
+            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center" />
+            <Button Margin="0,20,0,0"
+                FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Padding="10"
+                Content="Mainīt paroli" Command="{Binding ChangePassword}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
