@@ -157,8 +157,7 @@ namespace wpfOs.ViewModel
             CreateDefaultUser();
 
             // Initialize the app startup
-            //this.BootupSequence();
-            LoginVM_AuthenticateUserSuccess(null, EventArgs.Empty);
+            this.BootupSequence();
         }
 
         private void BootupSequence()
@@ -172,9 +171,14 @@ namespace wpfOs.ViewModel
         {
             try
             {
+                // stupid, but can't set password otherwise
                 SecureString pass = new();
-                pass.AppendChar('A');
-                AuthService.CreateUser("a", pass);
+                pass.AppendChar('u');
+                pass.AppendChar('s');
+                pass.AppendChar('e');
+                pass.AppendChar('r');
+
+                AuthService.CreateUser("user", pass);
             }
             catch (ArgumentException ex)
             {
@@ -184,8 +188,17 @@ namespace wpfOs.ViewModel
 
         private void LoginVM_AuthenticateUserSuccess(object? sender, EventArgs e)
         {
-            GlobalOsMenuVisibility = Visibility.Visible;
-            NavigateToDesktop();
+            // Cast the EventArgs to AuthenticateUserEventArgs to access the AuthenticatedUser
+            if (e is AuthenticateUserEventArgs args)
+            {
+                GlobalOsMenuVisibility = Visibility.Visible;
+                CurrentUser = args.AuthenticatedUser; // Access AuthenticatedUser from the casted EventArgs
+                NavigateToDesktop();
+            }
+            else
+            {
+                MessageBox.Show("System error!");
+            }
         }
     }
 }
