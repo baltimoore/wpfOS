@@ -8,6 +8,9 @@
     <Compile Update="View\Apps\Desktop.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Apps\Settings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Apps\TextEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -23,7 +23,7 @@
             </MenuItem>
 
             <MenuItem Header="Iestatījumi"
-                    Command=""/>
+                    Command="{Binding SetSettingsViewModel}"/>
 
             <MenuItem Header="Fails...">
                 <MenuItem Header="Jauns fails"

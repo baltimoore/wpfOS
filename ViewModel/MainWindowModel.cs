@@ -4,6 +4,7 @@ using System.Security;
 using System.Windows;
 using wpfOs.Model;
 using wpfOs.Service;
+using wpfOs.ViewModel.Apps;
 
 namespace wpfOs.ViewModel
 {
@@ -36,21 +37,21 @@ namespace wpfOs.ViewModel
         private User _currentUser;
         public User CurrentUser {
             get { return _currentUser; }
-            set { SetProperty(ref this._currentUser, value); }
+            set { SetProperty(ref _currentUser, value); }
         }
 
         private Visibility _menuVisibility = Visibility.Collapsed;
         public Visibility GlobalOsMenuVisibility
         {
             get { return _menuVisibility; }
-            set { SetProperty(ref this._menuVisibility, value); }
+            set { SetProperty(ref _menuVisibility, value); }
         }
 
         private object _currentViewModel;
         public object CurrentViewModel
         {
-            get { return this._currentViewModel; }
-            set { SetProperty(ref this._currentViewModel, value); }
+            get { return _currentViewModel; }
+            set { SetProperty(ref _currentViewModel, value); }
         }
 
         /******************************************
@@ -74,7 +75,7 @@ namespace wpfOs.ViewModel
         public RelayCommand SetSplashScreenViewModel { get; }
         public void NavigateToSplashScreen()
         {
-            CurrentViewModel = this.SplashVM;
+            CurrentViewModel = SplashVM;
         }
 
         // Login form definitions
@@ -82,7 +83,7 @@ namespace wpfOs.ViewModel
         public RelayCommand SetLoginFormViewModel { get; }
         public void NavigateToLoginForm()
         {
-            CurrentViewModel = this.LoginVM;
+            CurrentViewModel = LoginVM;
         }
 
         // Desktop definitions
@@ -92,21 +93,29 @@ namespace wpfOs.ViewModel
         {
             CurrentViewModel = DesktopVM;
         }
+
+        // Settings definition
+        public SettingsViewModel SettingsVM { get; }
+        public RelayCommand SetSettingsViewModel { get; }
+        public void NavigateToSettings()
+        {
+            CurrentViewModel = SettingsVM;
+        }
         
         // File text editor view
-        public Apps.TextEditorViewModel TextEditorVM;
+        public TextEditorViewModel TextEditorVM;
         public RelayCommand SetTextEditorViewModel { get; }
         public void NavigateToTextEditor()
         {
-            CurrentViewModel = this.TextEditorVM;
+            CurrentViewModel = TextEditorVM;
         }
 
         // Browser app definitions
-        public Apps.BrowserViewModel WebBrowserVM;
+        public BrowserViewModel WebBrowserVM;
         public RelayCommand SetWebBrowserViewModel { get; }
         public void NavigateToWebBrowser()
         {
-            CurrentViewModel = this.WebBrowserVM;
+            CurrentViewModel = WebBrowserVM;
         }
 
         /******************************************
@@ -122,38 +131,41 @@ namespace wpfOs.ViewModel
         {
             // View registration
             SplashVM = new SplashScreenModel();
-            SetSplashScreenViewModel = new RelayCommand(_ => this.NavigateToSplashScreen());
+            SetSplashScreenViewModel = new RelayCommand(_ => NavigateToSplashScreen());
 
             LoginVM = new LoginFormModel(this);
-            SetLoginFormViewModel = new RelayCommand(_ => this.NavigateToLoginForm());
+            SetLoginFormViewModel = new RelayCommand(_ => NavigateToLoginForm());
 
             DesktopVM = new DesktopViewModel(this);
-            SetDesktopViewModel = new RelayCommand(_ => this.NavigateToDesktop());
+            SetDesktopViewModel = new RelayCommand(_ => NavigateToDesktop());
 
-            TextEditorVM = new Apps.TextEditorViewModel();
-            SetTextEditorViewModel = new RelayCommand(_ => this.NavigateToTextEditor());
+            SettingsVM = new SettingsViewModel(this);
+            SetSettingsViewModel = new RelayCommand(_ => NavigateToSettings());
 
-            WebBrowserVM = new Apps.BrowserViewModel();
-            SetWebBrowserViewModel = new RelayCommand(_ => this.NavigateToWebBrowser());
+            TextEditorVM = new TextEditorViewModel();
+            SetTextEditorViewModel = new RelayCommand(_ => NavigateToTextEditor());
+
+            WebBrowserVM = new BrowserViewModel();
+            SetWebBrowserViewModel = new RelayCommand(_ => NavigateToWebBrowser());
 
             // Event registration
             LoginVM.AuthenticateUserSuccess += LoginVM_AuthenticateUserSuccess;
 
             // Service registration
-            this.AuthService = new();
+            AuthService = new();
 
-            this.CreateDefaultUser();
+            CreateDefaultUser();
 
             // Initialize the app startup
             //this.BootupSequence();
-            this.LoginVM_AuthenticateUserSuccess(null, EventArgs.Empty);
+            LoginVM_AuthenticateUserSuccess(null, EventArgs.Empty);
         }
 
         private void BootupSequence()
         {
-            this.NavigateToSplashScreen();
+            NavigateToSplashScreen();
             //wait for 5 seconds
-            Task.Delay(5000).ContinueWith(_ => this.NavigateToLoginForm() );
+            Task.Delay(5000).ContinueWith(_ => NavigateToLoginForm() );
         }
 
         private void CreateDefaultUser()
@@ -161,8 +173,8 @@ namespace wpfOs.ViewModel
             try
             {
                 SecureString pass = new();
-                pass.AppendChar('Z');
-                AuthService.CreateUser("z", pass);
+                pass.AppendChar('A');
+                AuthService.CreateUser("a", pass);
             }
             catch (ArgumentException ex)
             {
