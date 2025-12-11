@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
@@ -9,26 +10,55 @@ namespace wpfOs.Service
 {
     public class AuthService
     {
-        // Class properties
-        private UserCollection _userCollection;
+        /******************************************
+         ***********                    ***********
+         ******   Auth service  properties   ******
+         ***********       START        ***********
+         ****************         *****************
+         ******************************************/
+
+        private readonly UserCollection _userCollection;
+
         private static readonly string _userCollectionFilepath =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "users.dat");
+
         private static readonly byte[] _salt = System.Text.Encoding.UTF8.GetBytes(
             "testing salt for this fakeass operating system emulator");
 
-        // Exposed encapsulated properties
+        private static readonly JsonSerializerOptions _serialOptions =
+            new JsonSerializerOptions { IncludeFields = true };
+
+        /******************************************
+         ***********                    ***********
+         ******   Auth service  properties   ******
+         ***********         END        ***********
+         ****************         *****************
+         ******************************************/
+
+
 
         // Constructor
         public AuthService()
         {
             this._userCollection = LoadUsers();
         }
+
+        // Destructor
         ~AuthService()
         {
+            // Gotta make sure stuff is saved at termination
             SaveUsers(this._userCollection);
         }
 
-        // Public class methods
+
+
+        /******************************************
+         **********                      **********
+         *******    Service functionality    ******
+         **********        START         **********
+         ****************         *****************
+         ******************************************/
+
         public void CreateUser(string newUsername, SecureString newPassword)
         {
             User newUser = new(
@@ -36,73 +66,93 @@ namespace wpfOs.Service
                 HashUserPassword(newPassword),
                 UserRole.USER
             );
-            _userCollection.Users.Add(newUser);
+
+            // AddUser already checks if username is taken
+            if (! _userCollection.AddUser(newUser))
+                throw new ArgumentException("Lietotājvārds jau ir aizņemts.");
+
+            SaveUsers(this._userCollection);
+            return;
         }
 
         public void DeleteUser(User user)
         {
-            if (!_userCollection.Users.Contains(user))
-                return;
+            if (! _userCollection.RemoveUser(user.Username))
+                throw new ArgumentException("Lietotājs nav atrasts.");
 
-            _userCollection.Users.Remove(user);
             SaveUsers(this._userCollection);
+            return;
         }
 
         public void ChangeUsername(User user, string newUsername)
         {
-            User? ExistingUser = FindUser(user);
-            if (ExistingUser == null)
-                return;
+            if (! _userCollection.CheckUserExists(user.Username))
+                throw new ArgumentException("Lietotājs nav atrasts.");
 
-            ExistingUser.Username = newUsername;
+            if (! _userCollection.RenameUser(user.Username, newUsername))
+                throw new ArgumentException($"{user.Username} ir aizņemts.");
+
+            // successfully registered
             SaveUsers(this._userCollection);
+            return;
         }
 
         public void ChangePassword(User user, SecureString newPassword)
         {
-            // check if user exists
-            User? ExistingUser = FindUser(user);
-            if (ExistingUser == null)
-                return;
+            if (! _userCollection.TryGetUser(user.Username, out User storedUser))
+                throw new ArgumentException("Lietotājs nav atrasts.");
 
-            ExistingUser.PasswordHash = HashUserPassword(newPassword);
+            storedUser.PasswordHash = HashUserPassword(newPassword);
+
             SaveUsers(this._userCollection);
+            return;
         }
 
-        public dynamic AuthenticateUser(string username, SecureString password)
+        public User AuthenticateUser(string username, SecureString password)
         {
-            // check if username exists
-            User? ExistingUser = FindUser(username);
-            if (ExistingUser == null)
-                return null;
+            if (!_userCollection.TryGetUser(username, out User storedUser))
+                throw new ArgumentException("Lietotājs nav atrasts.");
 
             // Check if passwords are identical
-            if (ExistingUser.PasswordHash != HashUserPassword(password))
-                return false;
+            if (storedUser.PasswordHash != HashUserPassword(password))
+                throw new ArgumentException("Autentifikācija nav bijusi veiksmīga");
 
-            // Everything checks out~
-            return ExistingUser;
+            // Everything's clear
+            return storedUser;
         }
 
         public bool AuthorizeUser(User user, UserRole role)
         {
-            // check if user exists
-            User? ExistingUser = FindUser(user);
-            if (ExistingUser == null)
-                return false;
+            if (!_userCollection.TryGetUser(user.Username, out User storedUser))
+                throw new ArgumentException("Lietotājs nav atrasts.");
 
             // check if user has required role
-            if (!ExistingUser.UserRoles.Contains(role))
+            if (! storedUser.HasRole(role))
                 return false;
 
             return true;
         }
 
-        // Private class methods
+        /******************************************
+         **********                      **********
+         *******    Service functionality    ******
+         ***********         END        ***********
+         ****************         *****************
+         ******************************************/
+
+
+
+        /******************************************
+         **********                      **********
+         *******    Service inner methods    ******
+         **********        START         **********
+         ****************         *****************
+         ******************************************/
+
         static private UserCollection LoadUsers()
         {
             // If file doesn't exist, create an empty collection
-            if (!File.Exists(_userCollectionFilepath))
+            if (! File.Exists(_userCollectionFilepath))
                 return new();
 
             string json = File.ReadAllText(_userCollectionFilepath);
@@ -113,14 +163,16 @@ namespace wpfOs.Service
         {
             // Check if folder exists
             string dir = Path.GetDirectoryName(_userCollectionFilepath);
-            if (!Directory.Exists(dir))
+            if (! Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
 
             string json = JsonSerializer.Serialize(collection);
+            // Could also encrypt here before we write, but eh
             File.WriteAllText(_userCollectionFilepath, json);
+            return;
         }
 
-        static string HashUserPassword(SecureString newPassword)
+        static private string HashUserPassword(SecureString newPassword)
         {
             // Copy SecurePassword into memory pseudo-securely
             IntPtr unmanagedBytes =
@@ -128,6 +180,7 @@ namespace wpfOs.Service
             byte[] passByte = new byte[newPassword.Length * 2];
             Marshal.Copy(unmanagedBytes, passByte, 0, passByte.Length);
 
+            // Encrypt the password
             byte[] encryptedPassBytes = Rfc2898DeriveBytes.Pbkdf2(
                 passByte,
                 _salt,
@@ -136,17 +189,14 @@ namespace wpfOs.Service
                 30
             );
 
-            return System.Text.Encoding.UTF8.GetString(encryptedPassBytes);
+            return Convert.ToBase64String(encryptedPassBytes);
         }
 
-        private User? FindUser(string username)
-        {
-            return this._userCollection.Users.FirstOrDefault(x => x.Username == username, null);
-        }
-
-        private User? FindUser(User user)
-        {
-            return this._userCollection.Users.FirstOrDefault(x => x == user, null);
-        }
+        /******************************************
+         **********                      **********
+         *******    Service inner methods    ******
+         ***********         END        ***********
+         ****************         *****************
+         ******************************************/
     }
 }

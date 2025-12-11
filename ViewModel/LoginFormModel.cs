@@ -113,29 +113,25 @@ namespace wpfOs.ViewModel
             if (this.DisplayErrorsIfAny(errorList)) return;
 
             // Verify user credentials against AuthService
-            var answer = MainVM.AuthService.AuthenticateUser(Username, Password);
-            switch (answer)
+            User authUser;
+            try
             {
-                case null:
-                    errorList.Add("Šāds lietotājs nav reģistrēts");
-                    break;
-                case false:
-                    errorList.Add("Parole nav ievadīta pareizi");
-                    break;
-                case User:
-                    // Lietotājs ir atrasts un autentificējies
-                    break;
-
-                default:
-                    errorList.Add("Sistēmas kļūme!");
-                    break;
+                authUser = MainVM.AuthService.AuthenticateUser(Username, Password);
+            }
+            catch (ArgumentException ex)
+            {
+                errorList.Add(ex.Message);
+                this.DisplayErrorsIfAny(errorList);
+                return;
             }
 
             // If we have any errors again, display them and fail this function
-            if (this.DisplayErrorsIfAny(errorList)) return;
 
             // No errors? Announce the success
-            AuthenticateUserSuccess?.Invoke(null, new AuthenticateUserEventArgs { AuthenticatedUser = answer });
+            AuthenticateUserSuccess?.Invoke(
+                null,
+                new AuthenticateUserEventArgs { AuthenticatedUser = authUser }
+            );
             return;
         }
     }

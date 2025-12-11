@@ -141,9 +141,10 @@ namespace wpfOs.ViewModel
 
             // Service registration
             this.AuthService = new();
+
             SecureString pass = new();
-            pass.AppendChar('A');
-            AuthService.CreateUser("a", pass);
+            pass.AppendChar('Z');
+            AuthService.CreateUser("z", pass);
 
             // Initialize the app startup
             //this.BootupSequence();

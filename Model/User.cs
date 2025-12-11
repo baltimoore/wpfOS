@@ -1,50 +1,74 @@
-﻿namespace wpfOs.Model
+﻿using System.Data;
+using System.Text.Json.Serialization;
+
+namespace wpfOs.Model
 {
     public class User
     {
-        // Class properties
-        private string _username;
-        private string _passwordHash;
-        private UserRole[] _userRoles;
+        /******************************************
+         ***********                    ***********
+         ***********  User properties   ***********
+         ***********       START        ***********
+         ****************         *****************
+         ******************************************/
 
-        // Exposed encapsulated properties
+        private string _username;
         public string Username
         {
             get => _username;
             set => _username = value;
         }
+
+        private string _passwordHash;
         public string PasswordHash
         {
             get => _passwordHash;
             set => _passwordHash = value;
         }
-        public UserRole[] UserRoles
+
+        private List<UserRole> _userRoles;
+        public List<UserRole> Roles
         {
             get => _userRoles;
             set => _userRoles = value;
         }
 
-        // Constructor
-        public User(string username, string hash)
+        /******************************************
+         ***********                    ***********
+         ***********  User properties   ***********
+         ***********       START        ***********
+         ****************         *****************
+         ******************************************/
+
+
+
+        // Constructor overloads
+
+        public User(string username, string passwordHash)
+            : this(username, passwordHash, UserRole.USER)
+        { }
+
+        public User(string username, string passwordHash, UserRole role)
+            : this(username, passwordHash, [role])
+        { }
+
+        [JsonConstructor]
+        public User(string username, string passwordHash, List<UserRole> roles)
         {
             Username = username;
-            PasswordHash = hash;
-            UserRoles = [UserRole.USER];
-        }
-        public User(string username, string hash, UserRole role)
-        {
-            Username = username;
-            PasswordHash = hash;
-            UserRoles = [role];
-        }
-        public User(string username, string hash, UserRole[] roles)
-        {
-            Username = username;
-            PasswordHash = hash;
-            UserRoles = roles;
+            PasswordHash = passwordHash;
+            Roles = roles;
         }
 
-        // Class methods
+
+
+        /******************************************
+         ***********                    ***********
+         **********     User methods    ***********
+         ***********       START        ***********
+         ****************         *****************
+         ******************************************/
+        public bool HasRole(UserRole role) => Roles.Contains(role);
     }
 
     public enum UserRole
