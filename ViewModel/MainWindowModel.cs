@@ -142,9 +142,7 @@ namespace wpfOs.ViewModel
             // Service registration
             this.AuthService = new();
 
-            SecureString pass = new();
-            pass.AppendChar('Z');
-            AuthService.CreateUser("z", pass);
+            this.CreateDefaultUser();
 
             // Initialize the app startup
             //this.BootupSequence();
@@ -156,6 +154,20 @@ namespace wpfOs.ViewModel
             this.NavigateToSplashScreen();
             //wait for 5 seconds
             Task.Delay(5000).ContinueWith(_ => this.NavigateToLoginForm() );
+        }
+
+        private void CreateDefaultUser()
+        {
+            try
+            {
+                SecureString pass = new();
+                pass.AppendChar('Z');
+                AuthService.CreateUser("z", pass);
+            }
+            catch (ArgumentException ex)
+            {
+                // user already exists; do nothin
+            }
         }
 
         private void LoginVM_AuthenticateUserSuccess(object? sender, EventArgs e)
