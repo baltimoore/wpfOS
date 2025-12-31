@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace wpfOs.ViewModel.Apps
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -86,6 +86,10 @@ namespace wpfOs.ViewModel.Apps
             // Relay commands
             SetNewUsername   = new RelayCommand(_ => this.ChangeUserUsername());
             SetNewPassword   = new RelayCommand(_ => this.ChangeUserPassword());
+            
+            // System control commands (exposed from MainVM)
+            LogoutCommand = new RelayCommand(_ => MainVM.Logout());
+            PoweroffCommand = new RelayCommand(_ => MainVM.Poweroff());
         }
 
 
@@ -96,6 +100,10 @@ namespace wpfOs.ViewModel.Apps
          **********        START         **********
          ****************         *****************
          ******************************************/
+
+        // System control commands, inherited from MainVM
+        public RelayCommand LogoutCommand { get; }
+        public RelayCommand PoweroffCommand { get; }
 
         public RelayCommand SetNewUsername { get; }
         public void ChangeUserUsername()

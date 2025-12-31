@@ -15,11 +15,9 @@
 
             <MenuItem Header="Izslēgt...">
                 <MenuItem Header="Izslēgt"
-                        Command=""/>
+                        Command="{Binding PoweroffCommand}"/>
                 <MenuItem Header="Slēgt kontu"
-                        Command=""/>
-                <MenuItem Header="Mainīt lietotāju"
-                        Command=""/>
+                        Command="{Binding LogoutCommand}" />
             </MenuItem>
 
             <MenuItem Header="Iestatījumi"

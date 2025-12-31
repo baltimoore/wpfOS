@@ -127,6 +127,38 @@ namespace wpfOs.ViewModel
 
 
 
+        /******************************************
+         *******                            *******
+         *****     System control methods     *****
+         *****             START              *****
+         ****************         *****************
+         ******************************************/
+
+        public RelayCommand LogoutCommand { get; }
+        public void Logout()
+        {
+            // Clear current user and return to login
+            GlobalOsMenuVisibility = Visibility.Collapsed;
+            CurrentUser = null;
+            NavigateToLoginForm();
+        }
+
+        public RelayCommand PoweroffCommand { get; }
+        public void Poweroff()
+        {
+            // Close the application
+            Application.Current.Shutdown();
+        }
+
+        /******************************************
+         *******                            *******
+         *****  System control methods      *****
+         *****              END               *****
+         *****************       ******************
+         ******************************************/
+
+
+
         public MainWindowModel()
         {
             // View registration
@@ -147,6 +179,10 @@ namespace wpfOs.ViewModel
 
             WebBrowserVM = new BrowserViewModel();
             SetWebBrowserViewModel = new RelayCommand(_ => NavigateToWebBrowser());
+
+            // System control commands
+            LogoutCommand = new RelayCommand(_ => Logout());
+            PoweroffCommand = new RelayCommand(_ => Poweroff());
 
             // Event registration
             LoginVM.AuthenticateUserSuccess += LoginVM_AuthenticateUserSuccess;
