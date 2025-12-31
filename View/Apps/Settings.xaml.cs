@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using wpfOs.ViewModel.Apps;
 
 namespace wpfOs.View.Apps
 {
@@ -23,6 +12,19 @@ namespace wpfOs.View.Apps
         public Settings()
         {
             InitializeComponent();
+        }
+
+        // https://stackoverflow.com/a/25001115
+        private void OnNewPass1Changed(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+                ((SettingsViewModel)this.DataContext).NewPass1 = ((PasswordBox)sender).SecurePassword;
+        }
+
+        private void OnNewPass2Changed(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+                ((SettingsViewModel)this.DataContext).NewPass2 = ((PasswordBox)sender).SecurePassword;
         }
     }
 }

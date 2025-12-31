@@ -133,6 +133,13 @@ namespace wpfOs.Service
             return true;
         }
 
+        public static bool PasswordsAreEqual(SecureString ss1, SecureString ss2)
+        {
+            string cryptSS1 = HashUserPassword(ss1);
+            string cryptSS2 = HashUserPassword(ss2);
+            return cryptSS1 == cryptSS2;
+        }
+
         /******************************************
          **********                      **********
          *******    Service functionality    ******

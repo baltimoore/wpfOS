@@ -22,12 +22,22 @@ namespace wpfOs.ViewModel.Apps
 
         private MainWindowModel MainVM { get; }
 
-        public static ObservableCollection<String> UserPfpArray { get; } = new()
+        public string CurrentUsername
         {
-            @"C:\Path\To\Image1.jpg",
-            @"C:\Path\To\Image2.jpg",
-            @"C:\Path\To\Image3.jpg"
-        };
+            get { return MainVM.CurrentUser.Username ?? ""; }
+        }
+
+        public string CurrentUserRoles
+        {
+            get
+            {
+                // should never trigger, but again, just in case
+                if (MainVM.CurrentUser.Roles == null || MainVM.CurrentUser.Roles.Count == 0)
+                    return "Nav lomu";
+                
+                return string.Join(", ", MainVM.CurrentUser.Roles.Select(r => r.ToString()));
+            }
+        }
 
         private string _newUsername;
         public string NewUsername
@@ -66,9 +76,16 @@ namespace wpfOs.ViewModel.Apps
         {
             this.MainVM = main;
 
+            // Initialize new username with current username
+            // current user should already be set, but just in case
+            if (MainVM?.CurrentUser != null)
+            {
+                _newUsername = MainVM.CurrentUser.Username;
+            }
+
             // Relay commands
-            SetNewUsername = new RelayCommand(_ => this.ChangeUserUsername());
-            SetNewPassword = new RelayCommand(_ => this.ChangeUserPassword());
+            SetNewUsername   = new RelayCommand(_ => this.ChangeUserUsername());
+            SetNewPassword   = new RelayCommand(_ => this.ChangeUserPassword());
         }
 
 
@@ -102,18 +119,19 @@ namespace wpfOs.ViewModel.Apps
             }
 
             // If we're here, username was changed successfully
+            // notify UI and user that username has changed
+            OnPropertyChanged(nameof(CurrentUsername));
             DisplaySuccess("Lietotājvārds veiksmīgi nomainīts!");
         }
 
         public RelayCommand SetNewPassword { get; }
         public void ChangeUserPassword()
         {
-
             List<string> errorList = new();
             try
             {
                 // Check if passwords are identical
-                if (!PasswordsAreEqual(NewPass1, NewPass2))
+                if (!wpfOs.Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
                     throw new ArgumentException("Paroles nav vienādas!");
 
                 // since they're equal here, doesn't matter what we pass
@@ -131,36 +149,6 @@ namespace wpfOs.ViewModel.Apps
 
             // If we're here, username was changed successfully
             DisplaySuccess("Parole veiksmīgi nomainīta!");
-        }
-
-        // https://stackoverflow.com/a/23183092
-        private bool PasswordsAreEqual(SecureString ss1, SecureString ss2)
-        {
-            IntPtr bstr1 = IntPtr.Zero;
-            IntPtr bstr2 = IntPtr.Zero;
-            try
-            {
-                bstr1 = Marshal.SecureStringToBSTR(ss1);
-                bstr2 = Marshal.SecureStringToBSTR(ss2);
-                int length1 = Marshal.ReadInt32(bstr1, -4);
-                int length2 = Marshal.ReadInt32(bstr2, -4);
-                if (length1 == length2)
-                {
-                    for (int x = 0; x < length1; ++x)
-                    {
-                        byte b1 = Marshal.ReadByte(bstr1, x);
-                        byte b2 = Marshal.ReadByte(bstr2, x);
-                        if (b1 != b2) return false;
-                    }
-                }
-                else return false;
-                return true;
-            }
-            finally
-            {
-                if (bstr2 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr2);
-                if (bstr1 != IntPtr.Zero) Marshal.ZeroFreeBSTR(bstr1);
-            }
         }
 
         private static void DisplayErrorsIfAny(List<string> errors)

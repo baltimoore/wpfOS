@@ -6,34 +6,30 @@
              xmlns:local="clr-namespace:wpfOs.View.Apps"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <!-- PFP buttons -->
-        <DataTemplate x:Key="ButtonImageTemplate">
-            <Button Width="100" Height="100" Margin="8">
-                <Image Source="{Binding}"/>
-            </Button>
-        </DataTemplate>
-    </UserControl.Resources>
-    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
+        <!-- Current User Info Section -->
+        <Grid Grid.Column="0" Margin="20">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" 
+                               Text="Sveicināti "/>
+                    <TextBlock FontSize="28" HorizontalAlignment="Center" 
+                           Text="{Binding CurrentUsername}"
+                           Foreground="#FF0066CC"/>
+                </WrapPanel>
 
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Margin="0,18"
-                       FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
-                       Text="Profila attēls" />
-            <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-                <ItemsControl ItemTemplate="{StaticResource ButtonImageTemplate}"
-                              ItemsSource="{Binding UserPfpArray}" />
-            </WrapPanel>
+                <TextBlock FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"
+                           Text="Lomas:" Margin="0,0,0,10"/>
+                <TextBlock FontSize="18" HorizontalAlignment="Center" 
+                           Text="{Binding CurrentUserRoles}"
+                           Margin="0,0,0,30"
+                           Foreground="#FF0066CC"/>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Column="1">
@@ -43,29 +39,30 @@
             </Grid.RowDefinitions>
             
             <StackPanel Grid.Row="0"
-                        Orientation="Vertical" VerticalAlignment="Top">
-                <TextBlock Margin="0,18"
+                        Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock
                            FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
                            Text="Lietotājvārds"/>
-                <TextBox Margin="0,16,0,0"
-                         FontSize="16" Width="350" HorizontalAlignment="Center"
-                         Text="{Binding NewUsername}"/>
+                <TextBox Margin="0,16,0,0" Text="{Binding NewUsername}"
+                         FontSize="16" Width="350" HorizontalAlignment="Center" />
                 <Button Margin="0,20,0,0"
                         FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Padding="10"
-                        Content="Mainīt lietotājvārdu" Command="{Binding ChangeUsername}" />
+                        Content="Mainīt lietotājvārdu" Command="{Binding SetNewUsername}" />
             </StackPanel>
 
 
         <StackPanel Grid.Row="1"
-                    Orientation="Vertical" VerticalAlignment="Top">
-            <TextBlock Margin="0,18"
+                    Orientation="Vertical" VerticalAlignment="Center">
+            <TextBlock
                        FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
                        Text="Parole"/>
-            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center" />
-            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center" />
+            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center"
+                         PasswordChanged="OnNewPass1Changed" />
+            <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center"
+                         PasswordChanged="OnNewPass2Changed" />
             <Button Margin="0,20,0,0"
                 FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Padding="10"
-                Content="Mainīt paroli" Command="{Binding ChangePassword}" />
+                Content="Mainīt paroli" Command="{Binding SetNewPassword}" />
             </StackPanel>
         </Grid>
     </Grid>
