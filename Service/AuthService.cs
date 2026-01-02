@@ -59,12 +59,12 @@ namespace wpfOs.Service
          ****************         *****************
          ******************************************/
 
-        public void CreateUser(string newUsername, SecureString newPassword)
+        public void CreateUser(string username, SecureString password, UserRole role = UserRole.USER)
         {
             User newUser = new(
-                newUsername,
-                HashUserPassword(newPassword),
-                UserRole.USER
+                username,
+                HashUserPassword(password),
+                role
             );
 
             // AddUser already checks if username is taken

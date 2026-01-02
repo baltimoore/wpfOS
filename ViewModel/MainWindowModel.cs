@@ -209,12 +209,13 @@ namespace wpfOs.ViewModel
             {
                 // stupid, but can't set password otherwise
                 SecureString pass = new();
-                pass.AppendChar('u');
-                pass.AppendChar('s');
-                pass.AppendChar('e');
-                pass.AppendChar('r');
+                pass.AppendChar('a');
+                pass.AppendChar('d');
+                pass.AppendChar('m');
+                pass.AppendChar('i');
+                pass.AppendChar('n');
 
-                AuthService.CreateUser("user", pass);
+                AuthService.CreateUser("admin", pass, UserRole.ADMIN);
             }
             catch (ArgumentException ex)
             {
