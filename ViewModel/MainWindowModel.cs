@@ -118,6 +118,54 @@ namespace wpfOs.ViewModel
             CurrentViewModel = WebBrowserVM;
         }
 
+        // File Manager definitions
+        public FileManagerViewModel FileManagerVM { get; }
+        public RelayCommand SetFileManagerViewModel { get; }
+        public void NavigateToFileManager()
+        {
+            CurrentViewModel = FileManagerVM;
+        }
+
+        // Domain Management definitions
+        public DomainManagementViewModel DomainManagementVM { get; }
+        public RelayCommand SetDomainManagementViewModel { get; }
+        public void NavigateToDomainManagement()
+        {
+            CurrentViewModel = DomainManagementVM;
+        }
+
+        // Database Management definitions
+        public DatabaseManagementViewModel DatabaseManagementVM { get; }
+        public RelayCommand SetDatabaseManagementViewModel { get; }
+        public void NavigateToDatabaseManagement()
+        {
+            CurrentViewModel = DatabaseManagementVM;
+        }
+
+        // Email Management definitions
+        public EmailManagementViewModel EmailManagementVM { get; }
+        public RelayCommand SetEmailManagementViewModel { get; }
+        public void NavigateToEmailManagement()
+        {
+            CurrentViewModel = EmailManagementVM;
+        }
+
+        // Statistics definitions
+        public StatisticsViewModel StatisticsVM { get; }
+        public RelayCommand SetStatisticsViewModel { get; }
+        public void NavigateToStatistics()
+        {
+            CurrentViewModel = StatisticsVM;
+        }
+
+        // Backup Management definitions
+        public BackupManagementViewModel BackupManagementVM { get; }
+        public RelayCommand SetBackupManagementViewModel { get; }
+        public void NavigateToBackupManagement()
+        {
+            CurrentViewModel = BackupManagementVM;
+        }
+
         /******************************************
          *******                            *******
          *****  Application view definitions  *****
@@ -179,6 +227,24 @@ namespace wpfOs.ViewModel
 
             WebBrowserVM = new BrowserViewModel();
             SetWebBrowserViewModel = new RelayCommand(_ => NavigateToWebBrowser());
+
+            FileManagerVM = new FileManagerViewModel();
+            SetFileManagerViewModel = new RelayCommand(_ => NavigateToFileManager());
+
+            DomainManagementVM = new DomainManagementViewModel();
+            SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
+
+            DatabaseManagementVM = new DatabaseManagementViewModel();
+            SetDatabaseManagementViewModel = new RelayCommand(_ => NavigateToDatabaseManagement());
+
+            EmailManagementVM = new EmailManagementViewModel();
+            SetEmailManagementViewModel = new RelayCommand(_ => NavigateToEmailManagement());
+
+            StatisticsVM = new StatisticsViewModel();
+            SetStatisticsViewModel = new RelayCommand(_ => NavigateToStatistics());
+
+            BackupManagementVM = new BackupManagementViewModel();
+            SetBackupManagementViewModel = new RelayCommand(_ => NavigateToBackupManagement());
 
             // System control commands
             LogoutCommand = new RelayCommand(_ => Logout());

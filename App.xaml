@@ -30,6 +30,24 @@
         <DataTemplate DataType="{x:Type vma:SettingsViewModel}">
             <va:Settings/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:FileManagerViewModel}">
+            <va:FileManager/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:DomainManagementViewModel}">
+            <va:DomainManagement/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:DatabaseManagementViewModel}">
+            <va:DatabaseManagement/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:EmailManagementViewModel}">
+            <va:EmailManagement/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:StatisticsViewModel}">
+            <va:Statistics/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vma:BackupManagementViewModel}">
+            <va:BackupManagement/>
+        </DataTemplate>
         
     </Application.Resources>
 </Application>
