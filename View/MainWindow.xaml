@@ -10,30 +10,40 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Visibility="{Binding GlobalOsMenuVisibility}">
-            <MenuItem Header="Dashboard"
-                    Command="{Binding SetDashboardViewModel}"/>
 
-            <MenuItem Header="Izslēgt...">
+            <MenuItem Header="Sistēma">
+                <MenuItem Header="Dashboard"
+                        Command="{Binding SetDashboardViewModel}"/>
+                <MenuItem Header="Iestatījumi"
+                          Command="{Binding SetSettingsViewModel}"/>
+                <Separator />
+                <MenuItem Header="Slēgt kontu"
+                        Command="{Binding LogoutCommand}"/>
                 <MenuItem Header="Izslēgt"
                         Command="{Binding PoweroffCommand}"/>
-                <MenuItem Header="Slēgt kontu"
-                        Command="{Binding LogoutCommand}" />
             </MenuItem>
 
-            <MenuItem Header="Iestatījumi"
-                    Command="{Binding SetSettingsViewModel}"/>
-
-            <MenuItem Header="Fails...">
+            <MenuItem Header="Faili">
+                <MenuItem Header="Failu pārlūks"
+                        Command="{Binding SetFileManagerViewModel}"/>
                 <MenuItem Header="Jauns fails"
                         Command="{Binding SetTextEditorViewModel}"/>
-                <MenuItem Header="Saglabāt"
-                        Command=""/>
-                <MenuItem Header="Aizvērt"
-                        Command=""/>
             </MenuItem>
 
-            <MenuItem Header="Pārlūks"
-                    Command="{Binding SetWebBrowserViewModel}"/>
+            <MenuItem Header="Mājaslapas"
+                      Command="{Binding SetDomainManagementViewModel}"/>
+
+            <MenuItem Header="Datubāzes"
+                      Command="{Binding SetDatabaseManagementViewModel}"/>
+
+            <MenuItem Header="Epasts"
+                      Command="{Binding SetEmailManagementViewModel}"/>
+
+            <MenuItem Header="Statistika"
+                      Command="{Binding SetStatisticsViewModel}"/>
+
+            <MenuItem Header="Rezerves kopijas"
+                      Command="{Binding SetBackupManagementViewModel}"/>
 
         </Menu>
         <ContentControl DockPanel.Dock="Bottom" Content="{Binding CurrentViewModel}"/>
