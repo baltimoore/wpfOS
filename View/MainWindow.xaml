@@ -10,8 +10,8 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Visibility="{Binding GlobalOsMenuVisibility}">
-            <MenuItem Header="Desktop"
-                    Command="{Binding SetDesktopViewModel}"/>
+            <MenuItem Header="Dashboard"
+                    Command="{Binding SetDashboardViewModel}"/>
 
             <MenuItem Header="Izslēgt...">
                 <MenuItem Header="Izslēgt"

@@ -86,12 +86,12 @@ namespace wpfOs.ViewModel
             CurrentViewModel = LoginVM;
         }
 
-        // Desktop definitions
-        public DesktopViewModel DesktopVM { get; }
-        public RelayCommand SetDesktopViewModel { get; }
-        public void NavigateToDesktop()
+        // Dashboard definitions
+        public DashboardViewModel DashboardVM { get; }
+        public RelayCommand SetDashboardViewModel { get; }
+        public void NavigateToDashboard()
         {
-            CurrentViewModel = DesktopVM;
+            CurrentViewModel = DashboardVM;
         }
 
         // Settings definition
@@ -168,8 +168,8 @@ namespace wpfOs.ViewModel
             LoginVM = new LoginFormModel(this);
             SetLoginFormViewModel = new RelayCommand(_ => NavigateToLoginForm());
 
-            DesktopVM = new DesktopViewModel(this);
-            SetDesktopViewModel = new RelayCommand(_ => NavigateToDesktop());
+            DashboardVM = new DashboardViewModel(this);
+            SetDashboardViewModel = new RelayCommand(_ => NavigateToDashboard());
 
             SettingsVM = new SettingsViewModel(this);
             SetSettingsViewModel = new RelayCommand(_ => NavigateToSettings());
@@ -230,7 +230,7 @@ namespace wpfOs.ViewModel
             {
                 GlobalOsMenuVisibility = Visibility.Visible;
                 CurrentUser = args.AuthenticatedUser; // Access AuthenticatedUser from the casted EventArgs
-                NavigateToDesktop();
+                NavigateToDashboard();
             }
             else
             {

@@ -14,8 +14,8 @@
         <DataTemplate DataType="{x:Type vm:LoginFormModel}">
             <v:LoginForm/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:DesktopViewModel}">
-            <v:Desktop/>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <v:Dashboard/>
         </DataTemplate>
         
         <!--

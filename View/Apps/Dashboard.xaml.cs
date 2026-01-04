@@ -3,11 +3,11 @@
 namespace wpfOs.View
 {
     /// <summary>
-    /// Interaction logic for Desktop.xaml
+    /// Interaction logic for Dashboard.xaml
     /// </summary>
-    public partial class Desktop : UserControl
+    public partial class Dashboard: UserControl
     {
-        public Desktop()
+        public Dashboard()
         {
             InitializeComponent();
         }

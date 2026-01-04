@@ -5,7 +5,7 @@
     <Compile Update="View\Apps\Browser.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Apps\Desktop.xaml.cs">
+    <Compile Update="View\Apps\Dashboard.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Apps\Settings.xaml.cs">

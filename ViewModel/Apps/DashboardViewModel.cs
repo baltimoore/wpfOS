@@ -1,18 +1,19 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace wpfOs.ViewModel
 {
-    public class DesktopViewModel
+    public class DashboardViewModel
     {
         // Saving MainWindow ViewModel for app-wide data
         public MainWindowModel MainVM { get; }
 
 
 
-        public DesktopViewModel(MainWindowModel main)
+        public DashboardViewModel(MainWindowModel main)
         {
             this.MainVM = main;
         }
     }
 }
+
