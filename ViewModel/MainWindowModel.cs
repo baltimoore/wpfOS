@@ -110,14 +110,6 @@ namespace wpfOs.ViewModel
             CurrentViewModel = TextEditorVM;
         }
 
-        // Browser app definitions
-        public BrowserViewModel WebBrowserVM;
-        public RelayCommand SetWebBrowserViewModel { get; }
-        public void NavigateToWebBrowser()
-        {
-            CurrentViewModel = WebBrowserVM;
-        }
-
         // File Manager definitions
         public FileManagerViewModel FileManagerVM { get; }
         public RelayCommand SetFileManagerViewModel { get; }
@@ -224,9 +216,6 @@ namespace wpfOs.ViewModel
 
             TextEditorVM = new TextEditorViewModel();
             SetTextEditorViewModel = new RelayCommand(_ => NavigateToTextEditor());
-
-            WebBrowserVM = new BrowserViewModel();
-            SetWebBrowserViewModel = new RelayCommand(_ => NavigateToWebBrowser());
 
             FileManagerVM = new FileManagerViewModel();
             SetFileManagerViewModel = new RelayCommand(_ => NavigateToFileManager());

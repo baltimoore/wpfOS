@@ -21,9 +21,6 @@
         <!--
             OS application definitions
           -->
-        <DataTemplate DataType="{x:Type vma:BrowserViewModel}">
-            <va:Browser/>
-        </DataTemplate>
         <DataTemplate DataType="{x:Type vma:TextEditorViewModel}">
             <va:TextEditor/>
         </DataTemplate>

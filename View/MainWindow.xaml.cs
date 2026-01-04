@@ -13,9 +13,6 @@ namespace wpfOs
             InitializeComponent();
             MainWindowModel _context = new ViewModel.MainWindowModel();
             this.DataContext = _context;
-
-            // Used view binding naming
-            var AppsBrowserVM = _context.WebBrowserVM;
         }
     }
 }
