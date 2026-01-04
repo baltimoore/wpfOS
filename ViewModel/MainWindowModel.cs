@@ -158,6 +158,14 @@ namespace wpfOs.ViewModel
             CurrentViewModel = BackupManagementVM;
         }
 
+        // User Management definitions
+        public UserManagementViewModel UserManagementVM { get; }
+        public RelayCommand SetUserManagementViewModel { get; }
+        public void NavigateToUserManagement()
+        {
+            CurrentViewModel = UserManagementVM;
+        }
+
         /******************************************
          *******                            *******
          *****  Application view definitions  *****
@@ -235,6 +243,9 @@ namespace wpfOs.ViewModel
             BackupManagementVM = new BackupManagementViewModel();
             SetBackupManagementViewModel = new RelayCommand(_ => NavigateToBackupManagement());
 
+            UserManagementVM = new UserManagementViewModel(this);
+            SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
+
             // System control commands
             LogoutCommand = new RelayCommand(_ => Logout());
             PoweroffCommand = new RelayCommand(_ => Poweroff());
@@ -270,7 +281,8 @@ namespace wpfOs.ViewModel
                 pass.AppendChar('i');
                 pass.AppendChar('n');
 
-                AuthService.CreateUser("admin", pass, UserRole.ADMIN);
+                User tempAdm = new("a","aaa",UserRole.ADMIN);
+                AuthService.CreateUser(tempAdm, "admin", pass, UserRole.ADMIN);
             }
             catch (ArgumentException ex)
             {

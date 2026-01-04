@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Windows;
+using wpfOs.Model;
 
 namespace wpfOs.ViewModel.Apps
 {
@@ -63,6 +62,22 @@ namespace wpfOs.ViewModel.Apps
             set { _pass2 = value; }
         }
 
+        public Visibility UserManagementButtonVisibility
+        {
+            get
+            {
+                // bypass check
+                User? currentUser = MainVM?.CurrentUser;
+                if (currentUser == null)
+                    return Visibility.Collapsed;
+                
+                // display button only to admins
+                return MainVM.AuthService.AuthorizeUser(currentUser, UserRole.ADMIN)
+                    ? Visibility.Visible 
+                    : Visibility.Collapsed;
+            }
+        }
+
         /******************************************
         ***********                    ***********
         ******   Settings view properties   ******
@@ -86,6 +101,7 @@ namespace wpfOs.ViewModel.Apps
             // Relay commands
             SetNewUsername   = new RelayCommand(_ => this.ChangeUserUsername());
             SetNewPassword   = new RelayCommand(_ => this.ChangeUserPassword());
+            NavigateToUserManagementCommand = new RelayCommand(_ => MainVM.NavigateToUserManagement());
             
             // System control commands (exposed from MainVM)
             LogoutCommand = new RelayCommand(_ => MainVM.Logout());
@@ -104,6 +120,7 @@ namespace wpfOs.ViewModel.Apps
         // System control commands, inherited from MainVM
         public RelayCommand LogoutCommand { get; }
         public RelayCommand PoweroffCommand { get; }
+        public RelayCommand NavigateToUserManagementCommand { get; }
 
         public RelayCommand SetNewUsername { get; }
         public void ChangeUserUsername()

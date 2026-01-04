@@ -21,27 +21,31 @@
                      Orientation="Vertical" VerticalAlignment="Center">
             <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" 
-                            Text="Sveicināti "/>
-                <TextBlock FontSize="28" HorizontalAlignment="Center" 
-                        Text="{Binding CurrentUsername}"
-                        Foreground="#FF0066CC"/>
+                           Text="Sveicināti "/>
+                <TextBlock FontSize="28" HorizontalAlignment="Center"
+                           Foreground="#FF0066CC"
+                           Text="{Binding CurrentUsername}"/>
             </WrapPanel>
 
             <TextBlock FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"
-                        Text="Lomas:" Margin="0,0,0,10"/>
-            <TextBlock FontSize="18" HorizontalAlignment="Center" 
-                        Text="{Binding CurrentUserRoles}"
-                        Margin="0,0,0,40"
-                        Foreground="#FF0066CC"/>
+                       Text="Lomas:" Margin="0,0,0,10"/>
+            <TextBlock FontSize="18" HorizontalAlignment="Center"
+                       Margin="0,0,0,40" Foreground="#FF0066CC"
+                       Text="{Binding CurrentUserRoles}"/>
         </StackPanel>
 
         <!-- System Control Buttons -->
         <StackPanel Grid.Column="0" Grid.Row="1"
                     Orientation="Vertical" VerticalAlignment="Center">
             <TextBlock FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
-                        Margin="0,16"
+                       Margin="0,0,0,16"
                        Text="Sistēmas kontrole" />
 
+            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                    MinWidth="200"
+                    Content="Lietotāju pārvaldība" 
+                    Command="{Binding NavigateToUserManagementCommand}"
+                    Visibility="{Binding UserManagementButtonVisibility}"/>
             <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
                     MinWidth="200"
                     Content="Iziet" Command="{Binding LogoutCommand}" />
@@ -56,7 +60,7 @@
                        Text="Lietotājvārds"/>
             <TextBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center"
                      Text="{Binding NewUsername}" />
-            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+            <Button Margin="0,16,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
                     MinWidth="200"
                     Content="Mainīt lietotājvārdu" Command="{Binding SetNewUsername}" />
         </StackPanel>
@@ -71,7 +75,7 @@
             <PasswordBox Margin="0,16,0,0" FontSize="16" Width="350" HorizontalAlignment="Center"
                          PasswordChanged="OnNewPass2Changed" />
 
-            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+            <Button Margin="0,16,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
                     MinWidth="200"
                     Content="Mainīt paroli" Command="{Binding SetNewPassword}" />
         </StackPanel>
