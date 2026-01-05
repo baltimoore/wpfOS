@@ -33,6 +33,11 @@ namespace wpfOs.Model
             set => _userRoles = value;
         }
 
+        public string RolesString
+        {
+            get => string.Join(", ", Roles.Select(role => role.ToString()));
+        }
+
         /******************************************
          ***********                    ***********
          ***********  User properties   ***********

@@ -59,8 +59,27 @@ namespace wpfOs.Service
          ****************         *****************
          ******************************************/
 
-        public void CreateUser(string username, SecureString password, UserRole role = UserRole.USER)
+        /* 
+         * Admin only methods
+         */
+
+        public List<User> GetAllUsers(User currentUser)
         {
+            // cred check
+            if (!currentUser.Roles.Contains(UserRole.ADMIN))
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
+            return _userCollection._users.Values.ToList();
+        }
+
+        public void CreateUser(
+            User currentUser,
+            string username, SecureString password, UserRole role = UserRole.USER)
+        {
+            // cred check
+            if (!AuthorizeUser(currentUser, UserRole.ADMIN))
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
             User newUser = new(
                 username,
                 HashUserPassword(password),
@@ -75,14 +94,37 @@ namespace wpfOs.Service
             return;
         }
 
-        public void DeleteUser(User user)
+        public void DeleteUser(User currentUser, User delUser)
         {
-            if (! _userCollection.RemoveUser(user.Username))
+            // cred check
+            if (!AuthorizeUser(currentUser, UserRole.ADMIN))
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
+            if (! _userCollection.RemoveUser(delUser.Username))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             SaveUsers(this._userCollection);
             return;
         }
+
+        public void ChangeUserRole(User currentUser, User editUser, UserRole newRole)
+        {
+            // cred check
+            if (!AuthorizeUser(currentUser, UserRole.ADMIN))
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
+            if (!_userCollection.TryGetUser(editUser.Username, out User storedUser))
+                throw new ArgumentException("Lietotājs nav atrasts.");
+
+            storedUser.Roles = new List<UserRole> { newRole };
+
+            SaveUsers(this._userCollection);
+            return;
+        }
+
+        /* 
+         * all user methods
+         */
 
         public void ChangeUsername(User user, string newUsername)
         {
@@ -123,6 +165,7 @@ namespace wpfOs.Service
 
         public bool AuthorizeUser(User user, UserRole role)
         {
+            // defend against live data manipulation?
             if (!_userCollection.TryGetUser(user.Username, out User storedUser))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
@@ -140,11 +183,15 @@ namespace wpfOs.Service
             return cryptSS1 == cryptSS2;
         }
 
+        public bool TryGetUser(string username, out User user)
+        {
+            return _userCollection.TryGetUser(username, out user);
+        }
+
         /******************************************
          **********                      **********
          *******    Service functionality    ******
          ***********         END        ***********
-         ****************         *****************
          ******************************************/
 
 
