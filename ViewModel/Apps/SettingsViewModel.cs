@@ -161,7 +161,7 @@ namespace wpfOs.ViewModel.Apps
                     throw new ArgumentException("Lai mainītu paroli, jāaizpilda abi lauki!");
 
                 // Check if passwords are identical
-                if (Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
+                if (Service.AuthService.ArePasswordsEqual(NewPass1, NewPass2))
                     throw new ArgumentException("Paroles nav vienādas!");
 
                 // since they're equal here, doesn't matter what we pass

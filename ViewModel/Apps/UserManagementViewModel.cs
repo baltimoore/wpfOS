@@ -168,7 +168,7 @@ namespace wpfOs.ViewModel.Apps
                     NewPass2 == null || NewPass2.Length == 0)
                     throw new ArgumentException("Lai veidotu jaunu lietotāju, jāievada parole!");
 
-                if (!Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
+                if (!Service.AuthService.ArePasswordsEqual(NewPass1, NewPass2))
                     throw new ArgumentException("Paroles nav vienādas!");
 
                 // CreateUser throws errors for duplicate usernames
@@ -212,7 +212,7 @@ namespace wpfOs.ViewModel.Apps
                 // If password fields are not filled, assume they're not being changed
                 if (NewPass1 != null && NewPass1.Length != 0 &&
                     NewPass2 != null && NewPass2.Length != 0)
-                    if (Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
+                    if (Service.AuthService.ArePasswordsEqual(NewPass1, NewPass2))
                         MainVM.AuthService.ChangePassword(SelectedUser, NewPass1);
 
                 // Only add the selected role, if user does not have it
