@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using wpfOs.Model;
 
-namespace wpfOs.ViewModel.Apps
+namespace wpfOs.ViewModel.Apps.Settings
 {
     public class UserManagementViewModel : INotifyPropertyChanged
     {

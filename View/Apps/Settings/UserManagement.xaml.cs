@@ -1,15 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using wpfOs.ViewModel.Apps;
+using wpfOs.ViewModel.Apps.Settings;
 
-namespace wpfOs.View.Apps
+namespace wpfOs.View.Apps.Settings
 {
     /// <summary>
-    /// Interaction logic for Settings.xaml
+    /// Interaction logic for UserManagement.xaml
     /// </summary>
-    public partial class Settings : UserControl
+    public partial class UserManagement : UserControl
     {
-        public Settings()
+        public UserManagement()
         {
             InitializeComponent();
         }
@@ -18,13 +18,13 @@ namespace wpfOs.View.Apps
         private void OnNewPass1Changed(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-                ((SettingsViewModel)this.DataContext).NewPass1 = ((PasswordBox)sender).SecurePassword;
+                ((UserManagementViewModel)this.DataContext).NewPass1 = ((PasswordBox)sender).SecurePassword;
         }
 
         private void OnNewPass2Changed(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-                ((SettingsViewModel)this.DataContext).NewPass2 = ((PasswordBox)sender).SecurePassword;
+                ((UserManagementViewModel)this.DataContext).NewPass2 = ((PasswordBox)sender).SecurePassword;
         }
     }
 }

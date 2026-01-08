@@ -4,8 +4,10 @@
              xmlns:local="clr-namespace:wpfOs"
              xmlns:v="clr-namespace:wpfOs.View"
              xmlns:va="clr-namespace:wpfOs.View.Apps"
+             xmlns:vas="clr-namespace:wpfOs.View.Apps.Settings"
              xmlns:vm="clr-namespace:wpfOs.ViewModel"
              xmlns:vma="clr-namespace:wpfOs.ViewModel.Apps"
+             xmlns:vmas="clr-namespace:wpfOs.ViewModel.Apps.Settings"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:SplashScreenModel}">
@@ -21,11 +23,15 @@
         <!--
             OS application definitions
           -->
+        <DataTemplate DataType="{x:Type vmas:GeneralSettingsViewModel}">
+            <vas:GeneralSettings/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmas:UserManagementViewModel}">
+            <vas:UserManagement/>
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type vma:TextEditorViewModel}">
             <va:TextEditor/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vma:SettingsViewModel}">
-            <va:Settings/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vma:FileManagerViewModel}">
             <va:FileManager/>
@@ -44,9 +50,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vma:BackupManagementViewModel}">
             <va:BackupManagement/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vma:UserManagementViewModel}">
-            <va:UserManagement/>
         </DataTemplate>
         
     </Application.Resources>

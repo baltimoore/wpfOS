@@ -5,9 +5,9 @@ using System.Windows;
 using wpfOs.Model;
 using wpfOs;
 
-namespace wpfOs.ViewModel.Apps
+namespace wpfOs.ViewModel.Apps.Settings
 {
-    public class SettingsViewModel : INotifyPropertyChanged
+    public class GeneralSettingsViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -88,7 +88,7 @@ namespace wpfOs.ViewModel.Apps
 
 
 
-        public SettingsViewModel(MainWindowModel main)
+        public GeneralSettingsViewModel(MainWindowModel main)
         {
             this.MainVM = main;
 
@@ -152,7 +152,6 @@ namespace wpfOs.ViewModel.Apps
         public RelayCommand SetNewPassword { get; }
         public void ChangeUserPassword()
         {
-            List<string> errorList = new();
             try
             {
                 // Check if passwords are set
@@ -161,7 +160,7 @@ namespace wpfOs.ViewModel.Apps
                     throw new ArgumentException("Lai mainītu paroli, jāaizpilda abi lauki!");
 
                 // Check if passwords are identical
-                if (Service.AuthService.ArePasswordsEqual(NewPass1, NewPass2))
+                if (! Service.AuthService.ArePasswordsEqual(NewPass1, NewPass2))
                     throw new ArgumentException("Paroles nav vienādas!");
 
                 // since they're equal here, doesn't matter what we pass

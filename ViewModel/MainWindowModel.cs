@@ -4,8 +4,6 @@ using System.Security;
 using System.Windows;
 using wpfOs.Model;
 using wpfOs.Service;
-using wpfOs.ViewModel.Apps;
-using wpfOs;
 
 namespace wpfOs.ViewModel
 {
@@ -96,15 +94,23 @@ namespace wpfOs.ViewModel
         }
 
         // Settings definition
-        public SettingsViewModel SettingsVM { get; }
+        public Apps.Settings.GeneralSettingsViewModel SettingsVM { get; }
         public RelayCommand SetSettingsViewModel { get; }
         public void NavigateToSettings()
         {
             CurrentViewModel = SettingsVM;
         }
+
+        // User Management definitions
+        public Apps.Settings.UserManagementViewModel UserManagementVM { get; }
+        public RelayCommand SetUserManagementViewModel { get; }
+        public void NavigateToUserManagement()
+        {
+            CurrentViewModel = UserManagementVM;
+        }
         
         // File text editor view
-        public TextEditorViewModel TextEditorVM;
+        public Apps.TextEditorViewModel TextEditorVM;
         public RelayCommand SetTextEditorViewModel { get; }
         public void NavigateToTextEditor()
         {
@@ -112,7 +118,7 @@ namespace wpfOs.ViewModel
         }
 
         // File Manager definitions
-        public FileManagerViewModel FileManagerVM { get; }
+        public Apps.FileManagerViewModel FileManagerVM { get; }
         public RelayCommand SetFileManagerViewModel { get; }
         public void NavigateToFileManager()
         {
@@ -120,7 +126,7 @@ namespace wpfOs.ViewModel
         }
 
         // Domain Management definitions
-        public DomainManagementViewModel DomainManagementVM { get; }
+        public Apps.DomainManagementViewModel DomainManagementVM { get; }
         public RelayCommand SetDomainManagementViewModel { get; }
         public void NavigateToDomainManagement()
         {
@@ -128,7 +134,7 @@ namespace wpfOs.ViewModel
         }
 
         // Database Management definitions
-        public DatabaseManagementViewModel DatabaseManagementVM { get; }
+        public Apps.DatabaseManagementViewModel DatabaseManagementVM { get; }
         public RelayCommand SetDatabaseManagementViewModel { get; }
         public void NavigateToDatabaseManagement()
         {
@@ -136,7 +142,7 @@ namespace wpfOs.ViewModel
         }
 
         // Email Management definitions
-        public EmailManagementViewModel EmailManagementVM { get; }
+        public Apps.EmailManagementViewModel EmailManagementVM { get; }
         public RelayCommand SetEmailManagementViewModel { get; }
         public void NavigateToEmailManagement()
         {
@@ -144,7 +150,7 @@ namespace wpfOs.ViewModel
         }
 
         // Statistics definitions
-        public StatisticsViewModel StatisticsVM { get; }
+        public Apps.StatisticsViewModel StatisticsVM { get; }
         public RelayCommand SetStatisticsViewModel { get; }
         public void NavigateToStatistics()
         {
@@ -152,19 +158,11 @@ namespace wpfOs.ViewModel
         }
 
         // Backup Management definitions
-        public BackupManagementViewModel BackupManagementVM { get; }
+        public Apps.BackupManagementViewModel BackupManagementVM { get; }
         public RelayCommand SetBackupManagementViewModel { get; }
         public void NavigateToBackupManagement()
         {
             CurrentViewModel = BackupManagementVM;
-        }
-
-        // User Management definitions
-        public UserManagementViewModel UserManagementVM { get; }
-        public RelayCommand SetUserManagementViewModel { get; }
-        public void NavigateToUserManagement()
-        {
-            CurrentViewModel = UserManagementVM;
         }
 
         /******************************************
@@ -220,32 +218,32 @@ namespace wpfOs.ViewModel
             DashboardVM = new DashboardViewModel(this);
             SetDashboardViewModel = new RelayCommand(_ => NavigateToDashboard());
 
-            SettingsVM = new SettingsViewModel(this);
+            SettingsVM = new Apps.Settings.GeneralSettingsViewModel(this);
             SetSettingsViewModel = new RelayCommand(_ => NavigateToSettings());
 
-            TextEditorVM = new TextEditorViewModel();
+            UserManagementVM = new Apps.Settings.UserManagementViewModel(this);
+            SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
+
+            TextEditorVM = new Apps.TextEditorViewModel();
             SetTextEditorViewModel = new RelayCommand(_ => NavigateToTextEditor());
 
-            FileManagerVM = new FileManagerViewModel();
+            FileManagerVM = new Apps.FileManagerViewModel();
             SetFileManagerViewModel = new RelayCommand(_ => NavigateToFileManager());
 
-            DomainManagementVM = new DomainManagementViewModel();
+            DomainManagementVM = new Apps.DomainManagementViewModel();
             SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
 
-            DatabaseManagementVM = new DatabaseManagementViewModel();
+            DatabaseManagementVM = new Apps.DatabaseManagementViewModel();
             SetDatabaseManagementViewModel = new RelayCommand(_ => NavigateToDatabaseManagement());
 
-            EmailManagementVM = new EmailManagementViewModel();
+            EmailManagementVM = new Apps.EmailManagementViewModel();
             SetEmailManagementViewModel = new RelayCommand(_ => NavigateToEmailManagement());
 
-            StatisticsVM = new StatisticsViewModel();
+            StatisticsVM = new Apps.StatisticsViewModel();
             SetStatisticsViewModel = new RelayCommand(_ => NavigateToStatistics());
 
-            BackupManagementVM = new BackupManagementViewModel();
+            BackupManagementVM = new Apps.BackupManagementViewModel();
             SetBackupManagementViewModel = new RelayCommand(_ => NavigateToBackupManagement());
-
-            UserManagementVM = new UserManagementViewModel(this);
-            SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
 
             // System control commands
             LogoutCommand = new RelayCommand(_ => Logout());
