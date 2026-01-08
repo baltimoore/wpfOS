@@ -131,8 +131,9 @@ namespace wpfOs.Service
             if (! _userCollection.CheckUserExists(user.Username))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
+            // _userCollection.RenameUser() returns false if newUsername already exists
             if (! _userCollection.RenameUser(user.Username, newUsername))
-                throw new ArgumentException($"{user.Username} ir aizņemts.");
+                throw new ArgumentException($"{newUsername} ir aizņemts.");
 
             // successfully registered
             SaveUsers(this._userCollection);

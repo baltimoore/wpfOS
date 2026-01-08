@@ -126,12 +126,12 @@ namespace wpfOs.ViewModel.Apps
         public RelayCommand SetNewUsername { get; }
         public void ChangeUserUsername()
         {
-            List<string> errorList = new();
             try
             {
                 if (string.IsNullOrWhiteSpace(NewUsername))
                     throw new ArgumentException("Ievadiet lietotājvārdu!");
 
+                // function throws error if username is already taken
                 MainVM.AuthService.ChangeUsername(
                     this.MainVM.CurrentUser,
                     NewUsername.Trim()
@@ -155,8 +155,13 @@ namespace wpfOs.ViewModel.Apps
             List<string> errorList = new();
             try
             {
+                // Check if passwords are set
+                if (NewPass1 == null || NewPass1.Length == 0 ||
+                    NewPass2 == null || NewPass2.Length == 0)
+                    throw new ArgumentException("Lai mainītu paroli, jāaizpilda abi lauki!");
+
                 // Check if passwords are identical
-                if (!wpfOs.Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
+                if (Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
                     throw new ArgumentException("Paroles nav vienādas!");
 
                 // since they're equal here, doesn't matter what we pass
