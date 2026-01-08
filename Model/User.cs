@@ -12,6 +12,13 @@ namespace wpfOs.Model
          ****************         *****************
          ******************************************/
 
+        private Guid _id;
+        public Guid Id
+        {
+            get => _id;
+            private set => _id = value;
+        }
+
         private string _username;
         public string Username
         {
@@ -57,9 +64,16 @@ namespace wpfOs.Model
             : this(username, passwordHash, [role])
         { }
 
-        [JsonConstructor]
+        // Public constructor for creating new users (generates ID)
         public User(string username, string passwordHash, List<UserRole> roles)
+            : this(Guid.NewGuid(), username, passwordHash, roles)
+        { }
+
+        // Constructor for JSON deserialization (preserves existing ID)
+        [JsonConstructor]
+        private User(Guid id, string username, string passwordHash, List<UserRole> roles)
         {
+            Id = id;
             Username = username;
             PasswordHash = passwordHash;
             Roles = roles;
@@ -82,3 +96,4 @@ namespace wpfOs.Model
         ADMIN
     }
 }
+

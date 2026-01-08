@@ -255,8 +255,6 @@ namespace wpfOs.ViewModel
             // Service registration
             AuthService = new();
 
-            CreateDefaultUser();
-
             // Initialize the app startup
             this.BootupSequence();
         }
@@ -266,27 +264,6 @@ namespace wpfOs.ViewModel
             NavigateToSplashScreen();
             //wait for 5 seconds
             Task.Delay(5000).ContinueWith(_ => NavigateToLoginForm() );
-        }
-
-        private void CreateDefaultUser()
-        {
-            try
-            {
-                // stupid, but can't set password otherwise
-                SecureString pass = new();
-                pass.AppendChar('a');
-                pass.AppendChar('d');
-                pass.AppendChar('m');
-                pass.AppendChar('i');
-                pass.AppendChar('n');
-
-                User tempAdm = new("a","aaa",UserRole.ADMIN);
-                AuthService.CreateUser(tempAdm, "admin", pass, UserRole.ADMIN);
-            }
-            catch (ArgumentException ex)
-            {
-                // user already exists; do nothin
-            }
         }
 
         private void LoginVM_AuthenticateUserSuccess(object? sender, EventArgs e)

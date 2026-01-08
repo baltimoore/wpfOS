@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -41,6 +42,34 @@ namespace wpfOs.Service
         public AuthService()
         {
             this._userCollection = LoadUsers();
+            CreateDefaultAdminUser();
+        }
+
+        private void CreateDefaultAdminUser()
+        {
+            // only allow creation of default, if no other users exist
+            if (_userCollection != null && _userCollection.UserCount > 0)
+                return;
+
+            // stupid, but can't set password otherwise
+            SecureString pass = new();
+            pass.AppendChar('a');
+            pass.AppendChar('d');
+            pass.AppendChar('m');
+            pass.AppendChar('i');
+            pass.AppendChar('n');
+
+            User newUser = new(
+                "admin",
+                HashUserPassword(pass),
+                UserRole.ADMIN
+            );
+
+            // Add user to collection and save
+            if (_userCollection.AddUser(newUser))
+            {
+                SaveUsers(this._userCollection);
+            }
         }
 
         // Destructor
@@ -100,7 +129,7 @@ namespace wpfOs.Service
             if (!AuthorizeUser(currentUser, UserRole.ADMIN))
                 throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
 
-            if (! _userCollection.RemoveUser(delUser.Username))
+            if (! _userCollection.RemoveUser(delUser.Id))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             SaveUsers(this._userCollection);
@@ -113,7 +142,7 @@ namespace wpfOs.Service
             if (!AuthorizeUser(currentUser, UserRole.ADMIN))
                 throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
 
-            if (!_userCollection.TryGetUser(editUser.Username, out User storedUser))
+            if (!_userCollection.TryGetUser(editUser.Id, out User storedUser))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             storedUser.Roles = new List<UserRole> { newRole };
@@ -128,11 +157,11 @@ namespace wpfOs.Service
 
         public void ChangeUsername(User user, string newUsername)
         {
-            if (! _userCollection.CheckUserExists(user.Username))
+            if (! _userCollection.CheckUserExists(user.Id))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             // _userCollection.RenameUser() returns false if newUsername already exists
-            if (! _userCollection.RenameUser(user.Username, newUsername))
+            if (! _userCollection.RenameUser(user.Id, newUsername))
                 throw new ArgumentException($"{newUsername} ir aizņemts.");
 
             // successfully registered
@@ -142,7 +171,7 @@ namespace wpfOs.Service
 
         public void ChangePassword(User user, SecureString newPassword)
         {
-            if (! _userCollection.TryGetUser(user.Username, out User storedUser))
+            if (! _userCollection.TryGetUser(user.Id, out User storedUser))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             storedUser.PasswordHash = HashUserPassword(newPassword);
@@ -167,7 +196,7 @@ namespace wpfOs.Service
         public bool AuthorizeUser(User user, UserRole role)
         {
             // defend against live data manipulation?
-            if (!_userCollection.TryGetUser(user.Username, out User storedUser))
+            if (!_userCollection.TryGetUser(user.Id, out User storedUser))
                 throw new ArgumentException("Lietotājs nav atrasts.");
 
             // check if user has required role
@@ -193,6 +222,7 @@ namespace wpfOs.Service
          **********                      **********
          *******    Service functionality    ******
          ***********         END        ***********
+         ******************       *****************
          ******************************************/
 
 
