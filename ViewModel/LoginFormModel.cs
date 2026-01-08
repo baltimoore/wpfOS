@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows;
 using wpfOs.Model;
+using wpfOs;
 
 namespace wpfOs.ViewModel
 {
@@ -88,29 +89,13 @@ namespace wpfOs.ViewModel
             return msg;
         }
 
-        private bool DisplayErrorsIfAny(List<string> errors)
-        {
-            if (errors.Count == 0) return false;
-
-            // first newline needed, because join only adds *between* elements
-            string msg = ("• " + string.Join("\n• ", errors));
-            MessageBox.Show(
-                messageBoxText: msg,
-                caption: "Input error",
-                icon: MessageBoxImage.Exclamation,
-                button: MessageBoxButton.OK
-            );
-            return true;
-            
-        }
-
         private void TryAuthenticateUser()
         {
             // first, check if all data is submitted
             List<string> errorList = ValidateLoginForm();
 
             // If we have any errors so far, display them and fail this function
-            if (this.DisplayErrorsIfAny(errorList)) return;
+            if (MessageBoxHelper.ShowError(errorList)) return;
 
             // Verify user credentials against AuthService
             User authUser;
@@ -120,8 +105,7 @@ namespace wpfOs.ViewModel
             }
             catch (ArgumentException ex)
             {
-                errorList.Add(ex.Message);
-                this.DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
                 return;
             }
 

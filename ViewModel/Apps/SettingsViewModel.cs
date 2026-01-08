@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows;
 using wpfOs.Model;
+using wpfOs;
 
 namespace wpfOs.ViewModel.Apps
 {
@@ -138,15 +139,14 @@ namespace wpfOs.ViewModel.Apps
             }
             catch (ArgumentException ex)
             {
-                errorList.Add( ex.Message );
-                DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
                 return;
             }
 
             // If we're here, username was changed successfully
             // notify UI and user that username has changed
             OnPropertyChanged(nameof(CurrentUsername));
-            DisplaySuccess("Lietotājvārds veiksmīgi nomainīts!");
+            MessageBoxHelper.ShowSuccess("Lietotājvārds veiksmīgi nomainīts!");
         }
 
         public RelayCommand SetNewPassword { get; }
@@ -167,42 +167,12 @@ namespace wpfOs.ViewModel.Apps
             }
             catch (ArgumentException ex)
             {
-                errorList.Add(ex.Message);
-                DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
                 return;
             }
 
             // If we're here, username was changed successfully
-            DisplaySuccess("Parole veiksmīgi nomainīta!");
-        }
-
-        private static void DisplayErrorsIfAny(List<string> errors)
-        {
-            // If no errors exist, don't show error box
-            if (errors.Count == 0)
-                return;
-
-            // first newline needed, because join only adds *between* elements
-            string msg = ("• " + string.Join("\n• ", errors));
-            MessageBox.Show(
-                messageBoxText: msg,
-                caption: "Input error",
-                icon: MessageBoxImage.Exclamation,
-                button: MessageBoxButton.OK
-            );
-            return;
-        }
-
-        private static void DisplaySuccess(string message)
-        {
-            // first newline needed, because join only adds *between* elements
-            MessageBox.Show(
-                messageBoxText: message,
-                caption: "Success!",
-                icon: MessageBoxImage.Information,
-                button: MessageBoxButton.OK
-            );
-            return;
+            MessageBoxHelper.ShowSuccess("Parole veiksmīgi nomainīta!");
         }
     }
 }

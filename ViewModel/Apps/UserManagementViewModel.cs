@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Security;
-using System.Windows;
 using wpfOs.Model;
 
 namespace wpfOs.ViewModel.Apps
@@ -132,7 +131,8 @@ namespace wpfOs.ViewModel.Apps
                 TryRegisterUser();
             }
 
-            // editing current user details
+            // a user is selected
+            // editing their user details
             else
             {
                 TryEditUser();
@@ -151,13 +151,12 @@ namespace wpfOs.ViewModel.Apps
 
                 // notify UI and user that userlist has changed
                 SelectedUser = null;
-                DisplaySuccess("Lietotājs dzēsts veiksmīgi!");
+                MessageBoxHelper.ShowSuccess("Lietotājs dzēsts veiksmīgi!");
                 OnPropertyChanged(nameof(RegisteredUsers));
             }
             catch (Exception ex)
             {
-                List<string> errorList = [ex.Message];
-                DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
             }
         }
 
@@ -165,7 +164,8 @@ namespace wpfOs.ViewModel.Apps
         {
             try
             {
-                if (NewPass1.Length == 0 || NewPass2.Length == 0)
+                if (NewPass1 == null || NewPass1.Length == 0 ||
+                    NewPass2 == null || NewPass2.Length == 0)
                     throw new ArgumentException("Lai veidotu jaunu lietotāju, jāievada parole!");
 
                 if (!Service.AuthService.PasswordsAreEqual(NewPass1, NewPass2))
@@ -189,13 +189,12 @@ namespace wpfOs.ViewModel.Apps
                 }
 
                 // notify UI and user that userlist has changed
-                DisplaySuccess("Lietotājs izveidots veiksmīgi!");
+                MessageBoxHelper.ShowSuccess("Lietotājs izveidots veiksmīgi!");
                 OnPropertyChanged(nameof(RegisteredUsers));
             }
             catch (Exception ex)
             {
-                List<string> errorList = [ex.Message];
-                DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
             }
         }
 
@@ -222,13 +221,12 @@ namespace wpfOs.ViewModel.Apps
                     MainVM.AuthService.ChangeUserRole(MainVM.CurrentUser, SelectedUser, (UserRole) SelectedUserRole);
 
                 // notify UI and user that userlist has changed
-                DisplaySuccess("Lietotāja dati mainīti veiksmīgi!");
+                MessageBoxHelper.ShowSuccess("Lietotāja dati mainīti veiksmīgi!");
                 OnPropertyChanged(nameof(RegisteredUsers));
             }
             catch (Exception ex)
             {
-                List<string> errorList = [ex.Message];
-                DisplayErrorsIfAny(errorList);
+                MessageBoxHelper.ShowError(ex.Message);
             }
         }
 
@@ -246,35 +244,6 @@ namespace wpfOs.ViewModel.Apps
             //NewPass2?.Clear();
             //NewPass1 = new();
             //NewPass2 = new();
-        }
-
-        private static void DisplayErrorsIfAny(List<string> errors)
-        {
-            // If no errors exist, don't show error box
-            if (errors.Count == 0)
-                return;
-
-            // first newline needed, because join only adds *between* elements
-            string msg = ("• " + string.Join("\n• ", errors));
-            MessageBox.Show(
-                messageBoxText: msg,
-                caption: "Input error",
-                icon: MessageBoxImage.Exclamation,
-                button: MessageBoxButton.OK
-            );
-            return;
-        }
-
-        private static void DisplaySuccess(string message)
-        {
-            // first newline needed, because join only adds *between* elements
-            MessageBox.Show(
-                messageBoxText: message,
-                caption: "Success!",
-                icon: MessageBoxImage.Information,
-                button: MessageBoxButton.OK
-            );
-            return;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Windows;
 using wpfOs.Model;
 using wpfOs.Service;
 using wpfOs.ViewModel.Apps;
+using wpfOs;
 
 namespace wpfOs.ViewModel
 {
@@ -301,7 +302,7 @@ namespace wpfOs.ViewModel
             }
             else
             {
-                MessageBox.Show("System error!");
+                MessageBoxHelper.ShowSystemError();
             }
         }
     }
