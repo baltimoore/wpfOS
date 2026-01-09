@@ -108,12 +108,29 @@ namespace wpfOs.ViewModel
             CurrentViewModel = UserManagementVM;
         }
 
-        // Domain Management definitions
+        // User Domain Management definitions
         public Apps.Domains.UserDomainManagementViewModel UserDomainManagementVM { get; }
+        public RelayCommand SetUserDomainManagementViewModel { get; }
+        public void NavigateToUserDomainManagement()
+        {
+            CurrentViewModel = UserDomainManagementVM;
+        }
+
+        // Admin Domain Management definitions
+        public Apps.Domains.AdminDomainManagementViewModel AdminDomainManagementVM { get; }
+        public RelayCommand SetAdminDomainManagementViewModel { get; }
+        public void NavigateToAdminDomainManagement()
+        {
+            CurrentViewModel = AdminDomainManagementVM;
+        }
+
         public RelayCommand SetDomainManagementViewModel { get; }
         public void NavigateToDomainManagement()
         {
-            CurrentViewModel = UserDomainManagementVM;
+            if (this.AuthService.AuthorizeUser(this.CurrentUser, UserRole.ADMIN))
+                this.NavigateToAdminDomainManagement();
+            else
+                this.NavigateToUserDomainManagement();
         }
 
 
@@ -226,9 +243,12 @@ namespace wpfOs.ViewModel
             SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
 
             UserDomainManagementVM = new Apps.Domains.UserDomainManagementViewModel(this);
+            SetUserDomainManagementViewModel = new RelayCommand(_ => NavigateToUserDomainManagement());
+
+            AdminDomainManagementVM = new Apps.Domains.AdminDomainManagementViewModel(this);
+            SetAdminDomainManagementViewModel = new RelayCommand(_ => NavigateToAdminDomainManagement());
+
             SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
-
-
 
             TextEditorVM = new Apps.TextEditorViewModel();
             SetTextEditorViewModel = new RelayCommand(_ => NavigateToTextEditor());

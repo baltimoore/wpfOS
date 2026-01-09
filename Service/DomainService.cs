@@ -1,16 +1,15 @@
 using System.IO;
 using System.Text.Json;
 using wpfOs.Model;
-using wpfOs.View.Apps.Settings;
 
 namespace wpfOs.Service
 {
     public class DomainService
     {
         /******************************************
-         ***********                    ***********
-         ******   Domain service  properties   ******
-         ***********       START        ***********
+         ******                              ******
+         *****   Domain  service properties   *****
+         ******            START             ******
          ****************         *****************
          ******************************************/
 
@@ -23,9 +22,9 @@ namespace wpfOs.Service
             new JsonSerializerOptions { IncludeFields = true };
 
         /******************************************
-         ***********                    ***********
-         ******   Domain service  properties   ******
-         ***********         END        ***********
+         ******                              ******
+         *****   Domain  service properties   *****
+         ******             END              ******
          ****************         *****************
          ******************************************/
 
@@ -79,6 +78,24 @@ namespace wpfOs.Service
                 throw new ArgumentException("Domēns nav atrasts.");
 
             storedDomain.Status = newStatus;
+
+            SaveDomains(this._domainCollection);
+            return;
+        }
+
+        public void DeleteDomainRecord(
+            Domain domain,
+            AuthService authService, User currentUser
+        )
+        {
+            // cred check
+            if (!authService.AuthorizeUser(currentUser, UserRole.ADMIN))
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
+            if (!_domainCollection.TryGetDomain(domain.Name, out Domain storedDomain))
+                throw new ArgumentException("Domēns nav atrasts.");
+
+            _domainCollection.RemoveDomain(domain);
 
             SaveDomains(this._domainCollection);
             return;

@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="wpfOs.View.Apps.Domains.AdminDomainManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:wpfOs.View.Apps.Domains"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Button Width="100" HorizontalAlignment="Left" Margin="20"
+                Command="{Binding NavigateBackCommand}"
+                Content="Atpakaļ" Grid.Row="0"/>
+
+        <Grid Margin="10" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="Black" BorderThickness="0,0,0,1">
+                <Grid Background="#60a0a0a0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                            Grid.Column="0">
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="10,0,0,0"
+                                   Text="Īpašnieks"/>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                            Grid.Column="1">
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="10,0,0,0"
+                                   Text="Statuss"/>
+                    </Border>
+                    <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                            Grid.Column="2">
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="10,0,0,0"
+                                   Text="Domēna nosaukums"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                          Grid.Row="1">
+                <ListBox Name="LsbxDomains" SelectionMode="Single"
+                         ItemsSource="{Binding DomainList}"
+                         SelectedItem="{Binding SelectedDomain, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                                        Grid.Column="0">
+                                    <TextBlock FontSize="16" Padding="10,0,0,0"
+                                                Text="{Binding RequestedBy}"/>
+                                </Border>
+                                <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                                        Grid.Column="1">
+                                    <ComboBox Margin="0,0,0,16" FontSize="16" HorizontalAlignment="Center"
+                                              Name="CbxDomainStatuses"
+                                              ItemsSource="{Binding DataContext.DomainStatuses, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              SelectedItem="{Binding Status}">
+                                    </ComboBox>
+                                </Border>
+                                <Border BorderBrush="DimGray" BorderThickness="1,0,1,0"
+                                        Grid.Column="2">
+                                    <TextBlock FontSize="16" Padding="10,0,0,0"
+                                                Text="{Binding Name}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                    Grid.Row="2">
+            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                    Grid.Row="2" MinWidth="200"
+                    Content="Atcelt atlasi" Command="{Binding ClearSelectedDomainCommand}" />
+            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                    MinWidth="200" Background="#FFDC3545" Foreground="White" 
+                    Content="Dzēst visus saistītos datus" Command="{Binding DeleteDomainRecordCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
+

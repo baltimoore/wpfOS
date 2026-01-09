@@ -31,8 +31,12 @@
         <DataTemplate DataType="{x:Type vmas:UserManagementViewModel}">
             <vas:UserManagement/>
         </DataTemplate>
+        
         <DataTemplate DataType="{x:Type vmad:UserDomainManagementViewModel}">
             <vad:UserDomainManagement/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmad:AdminDomainManagementViewModel}">
+            <vad:AdminDomainManagement/>
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type vma:TextEditorViewModel}">

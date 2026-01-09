@@ -4,7 +4,7 @@ using wpfOs.Model;
 
 namespace wpfOs.ViewModel.Apps.Domains
 {
-    public class UserDomainManagementViewModel : INotifyPropertyChanged
+    public class AdminDomainManagementViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -20,22 +20,29 @@ namespace wpfOs.ViewModel.Apps.Domains
 
         private MainWindowModel MainVM { get; }
 
-        private string _newDomain;
-        public string NewDomainName
-        {
-            get {  return _newDomain; }
-            set {
-                _newDomain = value;
-                OnPropertyChanged(NewDomainName);
-            }
-        }
-
         public List<Domain> DomainList
         {
             get
             {
-                // user isn't admin; just grab their domains
-                return MainVM.DomainService.GetUserDomains(MainVM.CurrentUser);
+                try
+                {
+                    // throws error if current user isn't admin
+                    return MainVM.DomainService.GetAllDomains(MainVM.AuthService, MainVM.CurrentUser);
+                }
+                catch (Exception ex)
+                {
+                    MessageBoxHelper.ShowError(ex.Message);
+                }
+                List<Domain> empty = new();
+                return empty;
+            }
+        }
+
+        public Array DomainStatuses
+        {
+            get
+            {
+                return Enum.GetValues(typeof(DomainStatus));
             }
         }
 
@@ -60,15 +67,14 @@ namespace wpfOs.ViewModel.Apps.Domains
 
 
 
-        public UserDomainManagementViewModel(MainWindowModel main)
+        public AdminDomainManagementViewModel(MainWindowModel main)
         {
             this.MainVM = main;
 
             // Relay commands
             NavigateBackCommand = new RelayCommand(_ => MainVM.NavigateToDashboard());
             ClearSelectedDomainCommand = new RelayCommand(_ => ClearSelectedDomain());
-            RequestDomainCommand = new RelayCommand(_ => TryRequestDomainManagement());
-            CancelDomainCommand = new RelayCommand(_ => TryCancelDomainManagement());
+            DeleteDomainRecordCommand = new RelayCommand(_ => TryDeleteDomainRecord());
         }
 
 
@@ -92,41 +98,12 @@ namespace wpfOs.ViewModel.Apps.Domains
             SelectedDomain = null;
         }
 
-        public RelayCommand RequestDomainCommand { get; }
-        public void TryRequestDomainManagement()
+        public RelayCommand DeleteDomainRecordCommand { get; }
+        public void TryDeleteDomainRecord()
         {
             try
             {
-                if (NewDomainName == null || NewDomainName.Trim().Length == 0)
-                    throw new ArgumentException("Ievadiet pārvaldāmā domēna nosaukumu!");
-
-                // throws error if domain already exists
-                MainVM.DomainService.RequestDomain(MainVM.CurrentUser, NewDomainName);
-
-                // notify UI and user that userlist has changed
-                MessageBoxHelper.ShowSuccess("Domēna pārvaldīšanas pieteikums izveidots veiksmīgi!");
-                OnPropertyChanged(nameof(DomainList));
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBoxHelper.ShowError(ex.Message);
-            }
-        }
-
-        public RelayCommand CancelDomainCommand { get; }
-        public void TryCancelDomainManagement()
-        {
-            try
-            {
-                if (SelectedDomain == null)
-                    throw new ArgumentException ("Atlasiet domēnu, kuram pārtraukt pārvaldību!");
-
-                // throws error if user is not owner
-                MainVM.DomainService.CancelDomain(MainVM.CurrentUser, SelectedDomain);
-
-                // notify UI and user that userlist has changed
-                MessageBoxHelper.ShowSuccess("Domēna pārvaldīšanas beigas apstiprinātas!");
-                OnPropertyChanged(nameof(DomainList));
+                MainVM.DomainService.DeleteDomainRecord(SelectedDomain, MainVM.AuthService, MainVM.CurrentUser);
             }
             catch (ArgumentException ex)
             {
@@ -135,4 +112,3 @@ namespace wpfOs.ViewModel.Apps.Domains
         }
     }
 }
-

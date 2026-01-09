@@ -51,9 +51,14 @@ namespace wpfOs.Model
             return _domains.TryAdd(domain.Name, domain);
         }
 
-        public bool RemoveDomain(string name)
+        public bool RemoveDomain(string domainName)
         {
-            return _domains.Remove(name);
+            return _domains.Remove(domainName);
+        }
+
+        public bool RemoveDomain(Domain domain)
+        {
+            return _domains.Remove(domain.Name);
         }
 
         public bool CheckDomainExists(string name)
