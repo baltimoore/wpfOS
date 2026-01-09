@@ -60,10 +60,10 @@
                             <UniformGrid Rows="1" Columns="2">
                                 <Border BorderBrush="DimGray" BorderThickness="0,0,1,0">
                                     <TextBlock FontSize="16" Padding="10,0,0,0"
-                                                Text="{Binding DomainName}"/>
+                                                Text="{Binding Name}"/>
                                 </Border>
                                 <TextBlock FontSize="16" Padding="10,0,0,0"
-                                            Text="{Binding DomainStatus}"/>
+                                            Text="{Binding Status}"/>
                             </UniformGrid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -72,7 +72,7 @@
 
             <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
                     Grid.Row="2" MinWidth="200"
-                    Content="Atcelt atlasi" Command="{Binding ClearSelectedUserCommand}" />
+                    Content="Atcelt atlasi" Command="{Binding ClearSelectedDomainCommand}" />
 
         </Grid>
     </Grid>

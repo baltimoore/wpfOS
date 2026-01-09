@@ -104,6 +104,18 @@ namespace wpfOs.Service
             return;
         }
 
+        public void CancelDomain(User user, Domain domain)
+        {
+            // check if user has permissions to cancel
+            if (domain.RequestedBy != user.Id)
+                throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
+
+            domain.Status = DomainStatus.CLOSED;
+
+            SaveDomains(this._domainCollection);
+            return;
+        }
+
         public List<Domain> GetUserDomains(User user)
         {
             return _domainCollection.GetDomainsByUser(user.Id);
