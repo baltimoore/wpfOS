@@ -109,7 +109,7 @@ namespace wpfOs.ViewModel
         }
 
         // Domain Management definitions
-        public Apps.Domain.DomainManagementViewModel DomainManagementVM { get; }
+        public Apps.Domains.DomainManagementViewModel DomainManagementVM { get; }
         public RelayCommand SetDomainManagementViewModel { get; }
         public void NavigateToDomainManagement()
         {
@@ -225,7 +225,7 @@ namespace wpfOs.ViewModel
             UserManagementVM = new Apps.Settings.UserManagementViewModel(this);
             SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
 
-            DomainManagementVM = new Apps.Domain.DomainManagementViewModel(this);
+            DomainManagementVM = new Apps.Domains.DomainManagementViewModel(this);
             SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
 
 

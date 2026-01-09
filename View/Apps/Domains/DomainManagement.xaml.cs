@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace wpfOs.View.Apps.Domain
+namespace wpfOs.View.Apps.Domains
 {
     /// <summary>
     /// Interaction logic for DomainManagement.xaml

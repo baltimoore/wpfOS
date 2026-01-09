@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using wpfOs.Model;
 
-namespace wpfOs.ViewModel.Apps.Domain
+namespace wpfOs.ViewModel.Apps.Domains
 {
     public class DomainManagementViewModel : INotifyPropertyChanged
     {
@@ -35,12 +35,22 @@ namespace wpfOs.ViewModel.Apps.Domain
             get { return Enum.GetValues(typeof(DomainStatus)); }
         }
 
-        public List<Model.Domain> RegisteredDomains
+        public List<Domain> RegisteredDomains
         {
             get
             {
-                List<Model.Domain>
-                MainVM.AuthService.GetAllUsers(MainVM.CurrentUser);
+                List<Domain> domains;
+                try
+                {
+                    // throws error if current user isn't admin
+                    domains = MainVM.DomainService.GetAllDomains(MainVM.AuthService, MainVM.CurrentUser);
+                }
+                catch (Exception ex)
+                {
+                    // user isn't admin; just grab their domains
+                    domains = MainVM.DomainService.GetUserDomains(MainVM.CurrentUser);
+                }
+                return domains;
             }
         }
 

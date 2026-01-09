@@ -5,11 +5,11 @@
              xmlns:v="clr-namespace:wpfOs.View"
              xmlns:va="clr-namespace:wpfOs.View.Apps"
              xmlns:vas="clr-namespace:wpfOs.View.Apps.Settings"
-             xmlns:vad="clr-namespace:wpfOs.View.Apps.Domain"
+             xmlns:vad="clr-namespace:wpfOs.View.Apps.Domains"
              xmlns:vm="clr-namespace:wpfOs.ViewModel"
              xmlns:vma="clr-namespace:wpfOs.ViewModel.Apps"
              xmlns:vmas="clr-namespace:wpfOs.ViewModel.Apps.Settings"
-             xmlns:vmad="clr-namespace:wpfOs.ViewModel.Apps.Domain"
+             xmlns:vmad="clr-namespace:wpfOs.ViewModel.Apps.Domains"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:SplashScreenModel}">
