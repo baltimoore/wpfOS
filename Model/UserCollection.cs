@@ -35,12 +35,11 @@ namespace wpfOs.Model
         public UserCollection() {
             _users = new Dictionary<Guid, User>();
             _usernameIndex = new Dictionary<String, Guid>();
-            RebuildUsernameIndex();
         }
 
         // could be inside constructor,
         // but eh
-        private void RebuildUsernameIndex()
+        public void RebuildUsernameIndex()
         {
             _usernameIndex.Clear();
             foreach (var user in _users.Values)
@@ -85,8 +84,8 @@ namespace wpfOs.Model
             if (! _users.TryGetValue(userId, out User user))
                 return false;
 
-            _users.Remove(userId);
             _usernameIndex.Remove(user.Username);
+            _users.Remove(userId);
             return true;
         }
 
@@ -133,10 +132,8 @@ namespace wpfOs.Model
             if (_usernameIndex.ContainsKey(newUsername))
                 return false;
 
-            user.Username = newUsername;
-            // Update username index
-            _usernameIndex.Remove(user.Username);
             _usernameIndex[newUsername] = userId;
+            user.Username = newUsername;
             return true;
         }
 

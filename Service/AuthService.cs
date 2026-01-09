@@ -241,7 +241,12 @@ namespace wpfOs.Service
                 return new();
 
             string json = File.ReadAllText(_userCollectionFilepath);
-            return JsonSerializer.Deserialize<UserCollection>(json);
+            UserCollection collection = JsonSerializer.Deserialize<UserCollection>(json);
+            
+            // Rebuild username index after deserialization is complete
+            collection.RebuildUsernameIndex();
+            
+            return collection;
         }
 
         static private void SaveUsers(UserCollection collection)
