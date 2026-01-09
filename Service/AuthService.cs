@@ -95,7 +95,7 @@ namespace wpfOs.Service
         public List<User> GetAllUsers(User currentUser)
         {
             // cred check
-            if (!currentUser.Roles.Contains(UserRole.ADMIN))
+            if (!AuthorizeUser(currentUser, UserRole.ADMIN))
                 throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
 
             return _userCollection._users.Values.ToList();

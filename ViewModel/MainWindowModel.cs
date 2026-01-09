@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Security;
 using System.Windows;
 using wpfOs.Model;
 using wpfOs.Service;
@@ -31,7 +30,7 @@ namespace wpfOs.ViewModel
          ******************************************/
 
         public AuthService AuthService;
-
+        public DomainService DomainService;
 
         private User _currentUser;
         public User CurrentUser {
@@ -254,6 +253,7 @@ namespace wpfOs.ViewModel
 
             // Service registration
             AuthService = new();
+            DomainService = new();
 
             // Initialize the app startup
             this.BootupSequence();
