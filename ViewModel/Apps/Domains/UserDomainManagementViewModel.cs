@@ -4,7 +4,7 @@ using wpfOs.Model;
 
 namespace wpfOs.ViewModel.Apps.Domains
 {
-    public class DomainManagementViewModel : INotifyPropertyChanged
+    public class UserDomainManagementViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -75,7 +75,7 @@ namespace wpfOs.ViewModel.Apps.Domains
 
 
 
-        public DomainManagementViewModel(MainWindowModel main)
+        public UserDomainManagementViewModel(MainWindowModel main)
         {
             this.MainVM = main;
 

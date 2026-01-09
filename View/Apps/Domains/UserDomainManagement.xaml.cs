@@ -5,9 +5,9 @@ namespace wpfOs.View.Apps.Domains
     /// <summary>
     /// Interaction logic for DomainManagement.xaml
     /// </summary>
-    public partial class DomainManagement : UserControl
+    public partial class UserDomainManagement : UserControl
     {
-        public DomainManagement()
+        public UserDomainManagement()
         {
             InitializeComponent();
         }
