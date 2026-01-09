@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="wpfOs.View.Apps.Domain.DomainManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:wpfOs.View.Apps"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0">
+            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10">
+                <Button Width="100" HorizontalAlignment="Left" Margin="0,0,0,20"
+                        Command="{Binding NavigateBackCommand}"
+                        Content="Atpakaļ"/>
+
+                <Label FontSize="16" Width="350" HorizontalAlignment="Center"
+                       Content="Jauna domēna nosaukums"/>
+                <TextBox Margin="0,0,0,16" FontSize="16" Width="350" HorizontalAlignment="Center"
+                         Name="TbxDomainName" Text="{Binding NewDomainName}"/>
+
+
+                <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                        MinWidth="200"
+                        Content="Veidot pieteikumu" Command="{Binding RequestDomainCommand}" />
+                <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                        MinWidth="200" Background="#FFDC3545" Foreground="White" 
+                        Content="Beigt pārvaldi" Command="{Binding CancelDomainCommand}" />
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <Grid Margin="10"  Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="Black" BorderThickness="0,0,0,1">
+                <UniformGrid Rows="1" Columns="2"  Background="#60a0a0a0">
+                    <Border BorderBrush="DimGray" BorderThickness="0,0,1,0">
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="10,0,0,0"
+                                    Text="Domēna nosaukums"/>
+                    </Border>
+                    <TextBlock FontSize="16" FontWeight="Bold" Padding="10,0,0,0"
+                                Text="Statuss"/>
+                </UniformGrid>
+            </Border>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
+                <ListBox Name="LsbxUsers" SelectionMode="Single"
+                         ItemsSource="{Binding DomainList}"
+                         SelectedItem="{Binding SelectedDomain, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <UniformGrid Rows="1" Columns="2">
+                                <Border BorderBrush="DimGray" BorderThickness="0,0,1,0">
+                                    <TextBlock FontSize="16" Padding="10,0,0,0"
+                                                Text="{Binding DomainName}"/>
+                                </Border>
+                                <TextBlock FontSize="16" Padding="10,0,0,0"
+                                            Text="{Binding DomainStatus}"/>
+                            </UniformGrid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+
+            <Button Margin="0,5,0,5" FontSize="16" Padding="10,5" HorizontalAlignment="Center"
+                    Grid.Row="2" MinWidth="200"
+                    Content="Atcelt atlasi" Command="{Binding ClearSelectedUserCommand}" />
+
+        </Grid>
+    </Grid>
+</UserControl>
+

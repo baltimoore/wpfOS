@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.Json;
 using wpfOs.Model;
+using wpfOs.View.Apps.Settings;
 
 namespace wpfOs.Service
 {
@@ -56,19 +57,19 @@ namespace wpfOs.Service
          * Admin only methods
          */
 
-        public List<Domain> GetAllDomains(User currentUser)
+        // I don't want to store the auth service within itself
+        public List<Domain> GetAllDomains(AuthService authService, User currentUser)
         {
             // cred check
-            if (!currentUser.Roles.Contains(UserRole.ADMIN))
+            if (!authService.AuthorizeUser(currentUser, UserRole.ADMIN))
                 throw new ArgumentException("Jums nav tiesību veikt šo darbību.");
 
             return _domainCollection.GetAllDomains();
         }
 
-        // I just don't want it to store the auth service within itself
         public void UpdateDomainStatus(
             Domain domain, DomainStatus newStatus,
-            User currentUser, AuthService authService
+            AuthService authService, User currentUser
         ) {
             // cred check
             if (!authService.AuthorizeUser(currentUser, UserRole.ADMIN))

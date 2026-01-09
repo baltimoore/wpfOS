@@ -55,6 +55,7 @@ namespace wpfOs.Model
     {
         PENDING,
         MANAGED,
-        REJECTED
+        REJECTED,
+        CLOSED
     }
 }

@@ -107,7 +107,17 @@ namespace wpfOs.ViewModel
         {
             CurrentViewModel = UserManagementVM;
         }
-        
+
+        // Domain Management definitions
+        public Apps.Domain.DomainManagementViewModel DomainManagementVM { get; }
+        public RelayCommand SetDomainManagementViewModel { get; }
+        public void NavigateToDomainManagement()
+        {
+            CurrentViewModel = DomainManagementVM;
+        }
+
+
+
         // File text editor view
         public Apps.TextEditorViewModel TextEditorVM;
         public RelayCommand SetTextEditorViewModel { get; }
@@ -122,14 +132,6 @@ namespace wpfOs.ViewModel
         public void NavigateToFileManager()
         {
             CurrentViewModel = FileManagerVM;
-        }
-
-        // Domain Management definitions
-        public Apps.DomainManagementViewModel DomainManagementVM { get; }
-        public RelayCommand SetDomainManagementViewModel { get; }
-        public void NavigateToDomainManagement()
-        {
-            CurrentViewModel = DomainManagementVM;
         }
 
         // Database Management definitions
@@ -223,14 +225,16 @@ namespace wpfOs.ViewModel
             UserManagementVM = new Apps.Settings.UserManagementViewModel(this);
             SetUserManagementViewModel = new RelayCommand(_ => NavigateToUserManagement());
 
+            DomainManagementVM = new Apps.Domain.DomainManagementViewModel(this);
+            SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
+
+
+
             TextEditorVM = new Apps.TextEditorViewModel();
             SetTextEditorViewModel = new RelayCommand(_ => NavigateToTextEditor());
 
             FileManagerVM = new Apps.FileManagerViewModel();
             SetFileManagerViewModel = new RelayCommand(_ => NavigateToFileManager());
-
-            DomainManagementVM = new Apps.DomainManagementViewModel();
-            SetDomainManagementViewModel = new RelayCommand(_ => NavigateToDomainManagement());
 
             DatabaseManagementVM = new Apps.DatabaseManagementViewModel();
             SetDatabaseManagementViewModel = new RelayCommand(_ => NavigateToDatabaseManagement());
